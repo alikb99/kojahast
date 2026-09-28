@@ -6,7 +6,7 @@
 - Content Collections با `glob` loader و اعتبارسنجی zod
 - astro-icon (مجموعه‌های `lucide` و `simple-icons`)
 - CSS اختصاصی با توکن‌های طراحی (Tailwind فقط برای preflight)
-- هاستینگ: Cloudflare Pages / Netlify (فایل‌های `_headers` و `_redirects`)
+- هاستینگ: Cloudflare Pages با انتشار خودکار از گیت‌هاب (فایل‌های `_headers` و `_redirects`) — [deployment.md](deployment.md)
 
 ## ساختار فایل‌ها
 
