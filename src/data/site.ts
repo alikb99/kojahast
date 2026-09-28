@@ -2,8 +2,10 @@
  * تنظیمات مرکزی سایت — هر اطلاعاتی که در چند صفحه تکرار می‌شود فقط اینجا تعریف شود.
  */
 export const SITE = {
+  /** نام رسمی سایت؛ برای «نام سایت» در نتایج گوگل همه‌جا (title، og:site_name، اسکیمای WebSite) یکسان بماند */
   name: "کجا هست",
-  alternateName: "Kojahast",
+  /** شکل‌های دیگری که کاربران می‌نویسند؛ در اسکیمای WebSite و Organization */
+  alternateName: ["کجاهست", "Kojahast", "kojahast.com"],
   url: "https://kojahast.com",
   tagline: "راهنمای انتخاب مراکز خدمات و تعمیرات در تهران",
   description:
@@ -16,7 +18,10 @@ export const SITE = {
   address: "تهران، خیابان مطهری، خیابان قائم‌مقام فراهانی، پلاک ۱۵۸",
   hours: "شنبه تا پنجشنبه، ۹ تا ۱۸",
   defaultImage: "/images/best-mobile-phone-repairs-in-tehran.webp",
-  logo: "/images/logo.png",
+  /** لوگوی مربعی (نماد ذره‌بین) برای اسکیمای Organization — گوگل حداقل ۱۱۲×۱۱۲ می‌خواهد */
+  logo: "/images/logo-square-512.png",
+  /** لوگوی کامل با نوشته «کجا هست» برای هدر و فوتر */
+  logoWide: "/images/logo-kojahast.webp",
   /** شبکه‌های اجتماعی رسمی — فقط موارد واقعی را پر کنید؛ خالی‌ها نمایش داده نمی‌شوند */
   socials: {
     instagram: "",

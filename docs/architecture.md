@@ -14,7 +14,7 @@
 src/
 ├── content.config.ts          اسکیمای مقالات (فیلدهای مراکز)
 ├── content/posts/*.md         ۱۸ مقاله
-├── data/site.ts               تنظیمات مرکزی: نام، تلفن، دسته‌ها، منو، آیکون برندها
+├── data/site.ts               تنظیمات مرکزی: نام، نام‌های جایگزین، لوگو، تلفن، دسته‌ها، منو، آیکون برندها
 ├── lib/
 │   ├── utils.ts               تاریخ شمسی، ارقام فارسی، تلفن، مارک‌داون درون‌خطی
 │   ├── posts.ts               دریافت مقالات، پیلار/کلاستر، مرتبط‌ها، شمارش کلمات
@@ -36,7 +36,10 @@ src/
     ├── about.astro / contact.astro / 404.astro
     ├── feed.xml.ts            RSS
     └── search-index.json.ts   ایندکس جستجو (مقالات + تک‌تک مراکز)
-scripts/check-post.mjs         اعتبارسنجی محتوا
+scripts/check-post.mjs         اعتبارسنجی محتوا (+ کلاستر و LSI)
+scripts/check-schema.mjs       اعتبارسنجی JSON-LD خروجی
+scripts/apply-briefs.mjs       نوشتن بریف‌ها (scripts/data/keyword-briefs.json) در frontmatter
+scripts/build-icons.mjs        ساخت فاوآیکون و لوگو از assets/brand/ (docs/branding.md)
 ```
 
 ## سیستم طراحی (الهام از قالب دایرکتوری مرجع)
@@ -48,6 +51,7 @@ scripts/check-post.mjs         اعتبارسنجی محتوا
 | `--bg-soft` | `#f4f5f1` | پس‌زمینه بخش‌ها (با الگوی نقطه‌ای) |
 | `--footer` | `#272b2f` | فوتر تیره |
 | فونت | Vazirmatn (Medium / Black) | |
+| لوگو | `assets/brand/` → `public/` | [branding.md](branding.md) |
 
 الگوهای برگرفته از طرح مرجع: هدر سفید با دکمه کهربایی، هیرو تصویری با جستجوی کپسولی و انتخاب شهر، کاشی‌های «محبوب‌ترین» با دایره رنگی و عدد، فیلترهای کپسولی + کارت با پین سبز، بنر CTA با خط کهربایی، بخش «چطور کار می‌کند» سه‌مرحله‌ای، فوتر چهارستونه تیره.
 

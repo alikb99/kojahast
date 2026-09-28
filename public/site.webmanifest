@@ -1,0 +1,15 @@
+{
+  "name": "کجا هست",
+  "short_name": "کجا هست",
+  "description": "راهنمای انتخاب مراکز خدمات و تعمیرات در تهران",
+  "lang": "fa-IR",
+  "dir": "rtl",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#2f8a24",
+  "icons": [
+    { "src": "/favicon-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/images/logo-square-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -53,7 +53,7 @@
 
 همه صفحات یک `@graph` واحد دارند (`src/lib/schema.ts`):
 
-- **همه صفحات:** `Organization` (با لوگو) + `WebSite`
+- **همه صفحات:** `Organization` (با لوگوی مربعی ۵۱۲) + `WebSite` (با `alternateName` برای نام سایت در گوگل)
 - **خانه:** `CollectionPage` + `FAQPage`
 - **مقاله:** `WebPage` + `Article` (تاریخ انتشار/ویرایش، wordCount، publisher) + `BreadcrumbList` + `ItemList` از `LocalBusiness` (آدرس، تلفن بین‌المللی، geo در صورت وجود، sameAs اینستاگرام/سایت) + `FAQPage`
 - **دسته و وبلاگ:** `CollectionPage` با `ItemList` مقالات + `BreadcrumbList`
@@ -89,6 +89,8 @@
 - [x] کلمه کلیدی اصلی در h1 و دست‌کم یک H2 همه مقالات (قبلاً در ۴ مقاله در هیچ H2 و در مقاله اچ‌پی در h1 نبود)
 - [x] سیستم بریف کلمات کلیدی و چک خودکار کلاستر و LSI ([keyword-briefs.md](keyword-briefs.md))
 - [x] بریف سه کلاستر جدید: وان‌پلاس، ریلمی، لپ‌تاپ غرب تهران
+- [x] بریف کلمات کلیدی و LSI برای هر ۱۸ مقاله (پوشش ۱۰۰٪)
+- [x] لوگو و فاوآیکون جدید مطابق قواعد گوگل + سیگنال‌های نام سایت «کجا هست» ([branding.md](branding.md))
 
 ### باقی‌مانده
 
@@ -98,6 +100,5 @@
 - [ ] پر کردن شبکه‌های اجتماعی رسمی در `SITE.socials` (فعلاً خالی است و نمایش داده نمی‌شود)
 - [ ] تأیید اطلاعات مراکز مشکوک — فهرست در [data-verification.md](data-verification.md)
 - [ ] کلاسترهای جدید: وان‌پلاس، ریلمی، آنر، تعمیر لپ تاپ غرب/شرق تهران، تعمیر کنسول بازی. بریف سه مورد اول آماده است ([keyword-briefs.md](keyword-briefs.md)). نوشتنشان مانده، چون پراکسی محیط ابری دسترسی به سایت‌های منبع (tamiratkojast.ir، gzlocation.com، bartar-repairer.com و ...) را مسدود کرده و اطلاعات مراکز بدون تأیید از منبع نوشته نمی‌شود.
-- [ ] اضافه کردن `keywords` و `lsi` به ۱۸ مقاله موجود (فعلاً `check-post` فقط هشدار می‌دهد)
 - [ ] ساعت کاری ۲۳ مرکز پیدا نشده (هشدار `no hours` در `check-post`)؛ تلفنی پرسیده و اضافه شود
 - [ ] فایل‌های بلااستفاده: `src/components/*.client.jsx`، `FaqSection.astro`، `public/videos/*` (~۴.۵ مگابایت) و پکیج‌های `react`، `swiper`، `ionic` در package.json

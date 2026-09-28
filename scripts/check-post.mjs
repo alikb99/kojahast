@@ -77,10 +77,12 @@ for (const file of files) {
   // کلاستر کلمات کلیدی و LSI (docs/keyword-briefs.md)
   // مقایسه بدون حساسیت به نیم‌فاصله/فاصله و ی/ك عربی
   const norm = (s) => String(s).replace(/[‌\s]+/g, " ").replace(/ي/g, "ی").replace(/ك/g, "ک").toLowerCase();
-  const textN = norm([fm.title, fm.h1, fm.description, allText].join(" "));
+  // نام، منطقه و «مناسب برای» مراکز هم روی صفحه دیده می‌شوند
+  const visible = centers.flatMap((c) => [c.name, c.area, c.bestFor]);
+  const textN = norm([fm.title, fm.h1, fm.description, allText, ...visible].join(" "));
   const kw = fm.keywords || [];
   const lsi = fm.lsi || [];
-  if (!kw.length || !lsi.length) warns.push("no keyword brief (keywords/lsi) — see docs/keyword-briefs.md");
+  if (!kw.length || !lsi.length) errors.push("no keyword brief (keywords/lsi) — see docs/keyword-briefs.md");
   else {
     const missKw = kw.filter((k) => !textN.includes(norm(k)));
     const missLsi = lsi.filter((k) => !textN.includes(norm(k)));

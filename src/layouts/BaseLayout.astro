@@ -3,6 +3,7 @@ import "../styles/global.css";
 import SEO, { type SeoProps } from "../components/SEO.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import { SITE } from "../data/site";
 
 type Props = { seo: SeoProps };
 const { seo } = Astro.props;
@@ -15,8 +16,15 @@ const { seo } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#2f8a24" />
     <meta name="format-detection" content="telephone=no" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/images/logo.png" />
+    <!-- فاوآیکون: گوگل مربع با ضلع مضرب ۴۸ پیکسل می‌خواهد (docs/branding.md) -->
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="/favicon-48x48.png" type="image/png" sizes="48x48" />
+    <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
+    <link rel="icon" href="/favicon-192x192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="application-name" content={SITE.name} />
+    <meta name="apple-mobile-web-app-title" content={SITE.name} />
     <link rel="preload" href="/fonts/Vazir-Medium.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/Vazir-Black.woff2" as="font" type="font/woff2" crossorigin />
     <SEO {...seo} />
