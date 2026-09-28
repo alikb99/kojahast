@@ -7,7 +7,7 @@ import yaml from "js-yaml";
 
 const SITE = "https://kojahast.com";
 
-/** تاریخ آخرین ویرایش هر مقاله برای lastmod سایت‌مپ */
+/** تاریخ آخرین ویرایش هر مقاله برای lastmod سایت مپ */
 function postDates() {
   const dir = "./src/content/posts";
   const map = new Map();

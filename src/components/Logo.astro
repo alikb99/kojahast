@@ -1,23 +1,31 @@
 ---
+import { SITE } from "../data/site";
+
+/** light: برای پس زمینه تیره (فوتر) — نماد ذره بین + نوشته سفید، چون «هست» در لوگوی اصلی مشکی است */
 type Props = { light?: boolean };
 const { light = false } = Astro.props;
 ---
 
-<span class:list={["logo", { "logo--light": light }]}>
-  <svg class="logo__mark" viewBox="0 0 48 48" aria-hidden="true">
-    <path d="M24 3c-8.8 0-16 6.9-16 15.5C8 30 24 45 24 45s16-15 16-26.5C40 9.9 32.8 3 24 3Z" fill="#3a9a2c" />
-    <path d="M24 3c8.8 0 16 6.9 16 15.5 0 4.4-2.3 9.4-5.4 14.1L24 18.5V3Z" fill="#2f8a24" />
-    <circle cx="24" cy="18.5" r="7.5" fill="#fff" />
-    <circle cx="24" cy="18.5" r="3.6" fill="#f3b21b" />
-  </svg>
-  <span class="logo__text">کجا<span class="logo__accent">هست</span></span>
-</span>
+{
+  light ? (
+    <span class="logo logo--light">
+      <img class="logo__mark" src="/favicon-96x96.png" alt="" width="40" height="40" decoding="async" />
+      <span class="logo__text">
+        کجا<span class="logo__accent">هست</span>
+      </span>
+    </span>
+  ) : (
+    <span class="logo">
+      <img class="logo__wide" src={SITE.logoWide} alt={`لوگوی ${SITE.name}`} width="107" height="50" decoding="async" fetchpriority="high" />
+    </span>
+  )
+}
 
 <style>
   .logo { display: inline-flex; align-items: center; gap: 8px; }
-  .logo__mark { width: 34px; height: 34px; flex: none; }
-  .logo__text { font-weight: 900; font-size: 1.3rem; letter-spacing: -0.3px; color: var(--ink); line-height: 1; }
-  .logo__accent { color: var(--brand-600); margin-right: 3px; }
-  .logo--light .logo__text { color: #fff; }
-  .logo--light .logo__accent { color: var(--accent); }
+  .logo__wide { height: 50px; width: auto; display: block; }
+  .logo__mark { width: 40px; height: 40px; flex: none; }
+  .logo__text { font-weight: 900; font-size: 1.3rem; letter-spacing: -0.3px; line-height: 1; color: #fff; }
+  .logo__accent { color: var(--accent); margin-right: 3px; }
+  @media (max-width: 560px) { .logo__wide { height: 42px; } }
 </style>

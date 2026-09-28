@@ -29,7 +29,7 @@ const { placeholder = "برند یا خدمت؛ مثلاً تعمیر گوشی �
   type Item = { t: string; u: string; s: string; k: string };
   let index: Item[] | null = null;
   const norm = (s: string) =>
-    s.toLowerCase().replace(/ي/g, "ی").replace(/ك/g, "ک").replace(/[‌‏‌]/g, " ").replace(/\s+/g, " ").trim();
+    s.toLowerCase().replace(/ي/g, "ی").replace(/ك/g, "ک").replace(/[\u200c\u200f]/g, " ").replace(/\s+/g, " ").trim();
 
   async function load() {
     if (index) return index;

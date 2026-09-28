@@ -1,5 +1,5 @@
 // اعتبارسنجی سریع یک یا چند مقاله: node scripts/check-post.mjs src/content/posts/x.md ...
-// ساختار frontmatter، تعداد مراکز، حجم کلمات و لینک‌های داخلی را بررسی می‌کند.
+// ساختار frontmatter، تعداد مراکز، حجم کلمات و لینک های داخلی را بررسی می کند.
 import fs from "node:fs";
 import path from "node:path";
 import yaml from "js-yaml";
@@ -45,6 +45,9 @@ for (const file of files) {
     continue;
   }
   const body = m[2];
+  // قاعده سایت: نیم فاصله ممنوع است؛ همه جا فاصله معمولی (docs/content-guidelines.md)
+  const zw = (raw.match(/\u200c/g) || []).length;
+  if (zw) errors.push(`${zw} half-space (ZWNJ U+200C) found — use a normal space`);
   const req = ["title", "description", "category", "keyword", "image", "imageAlt", "publishedTime", "modifiedTime", "lead", "centers"];
   req.forEach((k) => !fm[k] && errors.push(`missing ${k}`));
   if (!["mobile-repairs", "laptop-and-computer-repair"].includes(fm.category)) errors.push(`bad category ${fm.category}`);
@@ -73,6 +76,33 @@ for (const file of files) {
   const allText = [fm.lead, body, ...centers.flatMap((c) => [...(c.summary || []), ...(c.services || []), ...(c.pros || []), ...(c.cons || [])]), ...(fm.faq || []).flatMap((f) => [f.q, f.a])].join(" ");
   const wc = words(allText.replace(/\]\([^)]*\)/g, "]"));
   if (wc < 700) errors.push(`word count ${wc} < 700`);
+
+  // کلاستر کلمات کلیدی و LSI (docs/keyword-briefs.md)
+  // مقایسه بدون حساسیت به نیم فاصله/فاصله و ی/ك عربی
+  const norm = (s) => String(s).replace(/[\u200c\s]+/g, " ").replace(/ي/g, "ی").replace(/ك/g, "ک").toLowerCase();
+  // نام، منطقه و «مناسب برای» مراکز هم روی صفحه دیده می شوند
+  const visible = centers.flatMap((c) => [c.name, c.area, c.bestFor]);
+  const textN = norm([fm.title, fm.h1, fm.description, allText, ...visible].join(" "));
+  const kw = fm.keywords || [];
+  const lsi = fm.lsi || [];
+  if (!kw.length || !lsi.length) errors.push("no keyword brief (keywords/lsi) — see docs/keyword-briefs.md");
+  else {
+    const missKw = kw.filter((k) => !textN.includes(norm(k)));
+    const missLsi = lsi.filter((k) => !textN.includes(norm(k)));
+    if (kw.length < 4) errors.push(`keywords cluster too small (${kw.length} < 4)`);
+    if (lsi.length < 10) errors.push(`lsi list too small (${lsi.length} < 10)`);
+    const cov = (lsi.length - missLsi.length) / lsi.length;
+    if (cov < 0.8) errors.push(`lsi coverage ${Math.round(cov * 100)}% < 80% → missing: ${missLsi.join("، ")}`);
+    else if (missLsi.length) warns.push(`lsi missing: ${missLsi.join("، ")}`);
+    if (missKw.length) errors.push(`cluster keywords not used: ${missKw.join("، ")}`);
+  }
+  if (fm.keyword) {
+    const k = norm(fm.keyword);
+    if (!norm(fm.h1 ?? fm.title).includes(k)) warns.push("main keyword not in h1");
+    if (!norm(fm.lead).includes(k)) warns.push("main keyword not in lead");
+    const h2s = [...body.matchAll(/^## (.+)$/gm)].map((x) => norm(x[1]));
+    if (!h2s.some((h) => h.includes(k))) warns.push("main keyword not in any H2");
+  }
 
   const links = [...allText.matchAll(/\]\((\/[^)\s]*)\)/g)].map((x) => x[1].split("#")[0]);
   links.forEach((l) => {

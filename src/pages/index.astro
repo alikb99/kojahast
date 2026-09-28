@@ -15,43 +15,43 @@ const clusters = posts.filter((p) => !p.data.pillar);
 const totalCenters = posts.reduce((n, p) => n + p.data.centers.length, 0);
 const areas = new Set(posts.flatMap((p) => p.data.centers.map((c) => c.area).filter(Boolean)));
 
-// رنگ‌های دایره آیکون کاشی‌ها (مثل قالب مرجع)
+// رنگ های دایره آیکون کاشی ها (مثل قالب مرجع)
 const palette = ["#3a9a2c", "#f39c12", "#2e86de", "#e74c3c", "#8e44ad", "#16a085", "#d35400", "#34495e"];
 
 const quick = clusters.slice(0, 5);
 
 const faqItems = [
   {
-    q: "کجا هست دقیقاً چه کاری انجام می‌دهد؟",
-    a: "ما برای هر نیاز (مثلاً تعمیر گوشی شیائومی یا لپ‌تاپ ایسوس) مراکز فعال تهران را پیدا می‌کنیم، اطلاعات تماس و ساعت کاری‌شان را از چند منبع تطبیق می‌دهیم و نقاط قوت و ضعف هر کدام را کنار هم می‌گذاریم تا مقایسه برایتان راحت شود.",
+    q: "کجا هست دقیقاً چه کاری انجام می دهد؟",
+    a: "ما برای هر نیاز (مثلاً تعمیر گوشی شیائومی یا لپ تاپ ایسوس) مراکز فعال تهران را پیدا می کنیم، اطلاعات تماس و ساعت کاری شان را از چند منبع تطبیق می دهیم و نقاط قوت و ضعف هر کدام را کنار هم می گذاریم تا مقایسه برایتان راحت شود.",
   },
   {
-    q: "ترتیب مراکز در لیست‌ها به معنی رتبه است؟",
-    a: "نه. ترتیب لیست رتبه‌بندی نیست. برای انتخاب، به ستون «مناسب برای» در جدول ابتدای هر راهنما و بخش نقاط قوت و ضعف هر مرکز دقت کنید.",
+    q: "ترتیب مراکز در لیست ها به معنی رتبه است؟",
+    a: "نه. ترتیب لیست رتبه بندی نیست. برای انتخاب، به ستون «مناسب برای» در جدول ابتدای هر راهنما و بخش نقاط قوت و ضعف هر مرکز دقت کنید.",
   },
   {
     q: "اطلاعات یک مرکز اشتباه است یا مرکز تعطیل شده؛ چه کنم؟",
-    a: "از [صفحه تماس](/contact/) خبر بدهید. گزارش‌ها را بررسی می‌کنیم و اگر تأیید شد، اطلاعات را اصلاح یا مرکز را از لیست حذف می‌کنیم.",
+    a: "از [صفحه تماس](/contact/) خبر بدهید. گزارش ها را بررسی می کنیم و اگر تأیید شد، اطلاعات را اصلاح یا مرکز را از لیست حذف می کنیم.",
   },
   {
-    q: "کسب‌وکار من در لیست نیست؛ چطور اضافه شوم؟",
-    a: "ثبت اولیه رایگان است. از بخش [ثبت کسب‌وکار](/contact/#add-business) نام، آدرس، تلفن و حوزه تخصصی‌تان را بفرستید. بعد از بررسی و تماس تیم ما، در راهنمای مرتبط قرار می‌گیرید.",
+    q: "کسب وکار من در لیست نیست؛ چطور اضافه شوم؟",
+    a: "ثبت اولیه رایگان است. از بخش [ثبت کسب وکار](/contact/#add-business) نام، آدرس، تلفن و حوزه تخصصی تان را بفرستید. بعد از بررسی و تماس تیم ما، در راهنمای مرتبط قرار می گیرید.",
   },
   {
-    q: "آیا کجا هست خودش تعمیر انجام می‌دهد؟",
-    a: "کار اصلی ما معرفی و مقایسه است. اگر نمی‌دانید برای مشکل دستگاهتان کدام مرکز مناسب‌تر است، با شماره پشتیبانی تماس بگیرید تا راهنمایی‌تان کنیم.",
+    q: "آیا کجا هست خودش تعمیر انجام می دهد؟",
+    a: "کار اصلی ما معرفی و مقایسه است. اگر نمی دانید برای مشکل دستگاهتان کدام مرکز مناسب تر است، با شماره پشتیبانی تماس بگیرید تا راهنمایی تان کنیم.",
   },
 ];
 
 const steps = [
-  { icon: "lucide:search", title: "نیازت را جستجو کن", text: "برند دستگاه یا نوع خدمت را بنویس؛ راهنمای مخصوص همان را با همه مراکز فعال تهران می‌بینی." },
-  { icon: "lucide:list", title: "مراکز را مقایسه کن", text: "جدول ابتدای هر راهنما، منطقه، ساعت کاری و تخصص مراکز را کنار هم می‌گذارد؛ نقاط قوت و ضعف را هم بخوان." },
-  { icon: "lucide:navigation", title: "تماس بگیر و برو", text: "با یک لمس تماس بگیر یا با گوگل‌مپ، نشان و بلد مسیریابی کن. قبل از رفتن، ساعت کاری را تلفنی بپرس." },
+  { icon: "lucide:search", title: "نیازت را جستجو کن", text: "برند دستگاه یا نوع خدمت را بنویس؛ راهنمای مخصوص همان را با همه مراکز فعال تهران می بینی." },
+  { icon: "lucide:list", title: "مراکز را مقایسه کن", text: "جدول ابتدای هر راهنما، منطقه، ساعت کاری و تخصص مراکز را کنار هم می گذارد؛ نقاط قوت و ضعف را هم بخوان." },
+  { icon: "lucide:navigation", title: "تماس بگیر و برو", text: "با یک لمس تماس بگیر یا با گوگل مپ، نشان و بلد مسیریابی کن. قبل از رفتن، ساعت کاری را تلفنی بپرس." },
 ];
 
 const seo = {
-  title: `${SITE.name} | راهنمای انتخاب تعمیرگاه موبایل و لپ‌تاپ در تهران`,
-  description: `مقایسه ${fa(totalCenters)} مرکز تعمیر موبایل، لپ‌تاپ و گجت در تهران با آدرس، تلفن، ساعت کاری و نقاط قوت و ضعف؛ قبل از سپردن دستگاه، مطمئن انتخاب کنید.`,
+  title: `${SITE.name} | راهنمای انتخاب تعمیرگاه موبایل و لپ تاپ در تهران`,
+  description: `مقایسه ${fa(totalCenters)} مرکز تعمیر موبایل، لپ تاپ و گجت در تهران با آدرس، تلفن، ساعت کاری و نقاط قوت و ضعف؛ قبل از سپردن دستگاه، مطمئن انتخاب کنید.`,
   path: "/",
   image: SITE.defaultImage,
   type: "website" as const,
@@ -69,9 +69,9 @@ const seo = {
   <section class="hero">
     <img class="hero__bg" src="/images/best-mobile-phone-repairs-in-tehran.webp" alt="" width="700" height="400" fetchpriority="high" />
     <div class="container hero__content">
-      <p class="hero__kicker">{fa(posts.length)} راهنما · {fa(totalCenters)} مرکز بررسی‌شده در تهران</p>
+      <p class="hero__kicker">{fa(posts.length)} راهنما · {fa(totalCenters)} مرکز بررسی شده در تهران</p>
       <h1>تعمیرگاه مطمئن در تهران <span>کجا هست؟</span></h1>
-      <p class="hero__sub">مراکز تعمیر موبایل، لپ‌تاپ و گجت را با آدرس، تلفن، ساعت کاری و نقاط قوت و ضعف مقایسه کنید.</p>
+      <p class="hero__sub">مراکز تعمیر موبایل، لپ تاپ و گجت را با آدرس، تلفن، ساعت کاری و نقاط قوت و ضعف مقایسه کنید.</p>
       <SearchBox id="hero-search" />
       <div class="hero__quick">
         <span>جستجوهای پرتکرار:</span>
@@ -84,8 +84,8 @@ const seo = {
   <section class="section section--pattern" aria-labelledby="popular-title">
     <div class="container">
       <div class="section-head">
-        <h2 id="popular-title">محبوب‌ترین راهنماها</h2>
-        <p>برند دستگاهتان را انتخاب کنید؛ عدد داخل پرانتز تعداد مراکز معرفی‌شده است.</p>
+        <h2 id="popular-title">محبوب ترین راهنماها</h2>
+        <p>برند دستگاهتان را انتخاب کنید؛ عدد داخل پرانتز تعداد مراکز معرفی شده است.</p>
       </div>
       <div class="grid grid--4 tiles">
         {posts.map((p, i) => (
@@ -109,12 +109,12 @@ const seo = {
     <div class="container">
       <div class="section-head">
         <h2 id="explore-title">جدیدترین راهنماهای مقایسه مراکز</h2>
-        <p>هر راهنما با یک جدول مقایسه شروع می‌شود و بعد، تک‌تک مراکز را با جزئیات و نقاط ضعفشان بررسی می‌کند.</p>
+        <p>هر راهنما با یک جدول مقایسه شروع می شود و بعد، تک تک مراکز را با جزئیات و نقاط ضعفشان بررسی می کند.</p>
       </div>
       <div class="filters" role="group" aria-label="فیلتر راهنماها" data-filters>
         <button class="filter" type="button" aria-pressed="true" data-filter="all">همه</button>
         <button class="filter" type="button" aria-pressed="false" data-filter="mobile">موبایل و گجت</button>
-        <button class="filter" type="button" aria-pressed="false" data-filter="laptop">لپ‌تاپ</button>
+        <button class="filter" type="button" aria-pressed="false" data-filter="laptop">لپ تاپ</button>
         <button class="filter" type="button" aria-pressed="false" data-filter="apple">محصولات اپل</button>
       </div>
       <div class="grid grid--4" data-cards>
@@ -128,10 +128,10 @@ const seo = {
     <div class="band">
       <img src="/images/laptop-repair-center.webp" alt="" width="700" height="400" loading="lazy" class="band__bg" />
       <div class="band__content">
-        <h2 id="band-title">کسب‌وکار شما هم باید اینجا دیده شود</h2>
-        <p>تعمیرگاه یا مرکز خدماتی دارید؟ ثبت اولیه رایگان است و بعد از بررسی، در راهنمای مرتبط معرفی می‌شوید.</p>
+        <h2 id="band-title">کسب وکار شما هم باید اینجا دیده شود</h2>
+        <p>تعمیرگاه یا مرکز خدماتی دارید؟ ثبت اولیه رایگان است و بعد از بررسی، در راهنمای مرتبط معرفی می شوید.</p>
         <div class="band__actions">
-          <a class="btn btn--accent" href="/contact/#add-business"><Icon name="lucide:store" />ثبت رایگان کسب‌وکار</a>
+          <a class="btn btn--accent" href="/contact/#add-business"><Icon name="lucide:store" />ثبت رایگان کسب وکار</a>
           <a class="btn btn--ghost" href="/about/#method">روش بررسی مراکز</a>
         </div>
       </div>
@@ -142,7 +142,7 @@ const seo = {
   <section class="section how" aria-labelledby="how-title">
     <div class="container">
       <div class="section-head">
-        <h2 id="how-title">کجا هست چطور کار می‌کند؟</h2>
+        <h2 id="how-title">کجا هست چطور کار می کند؟</h2>
       </div>
       <ol class="steps">
         {steps.map((s, i) => (
@@ -154,7 +154,7 @@ const seo = {
         ))}
       </ol>
       <ul class="stats" aria-label="آمار کجا هست">
-        <li><strong>{fa(totalCenters)}</strong><span>مرکز بررسی‌شده</span></li>
+        <li><strong>{fa(totalCenters)}</strong><span>مرکز بررسی شده</span></li>
         <li><strong>{fa(posts.length)}</strong><span>راهنمای تخصصی</span></li>
         <li><strong>{fa(areas.size)}</strong><span>محله و منطقه</span></li>
         <li><strong>{fa(Object.keys(CATEGORIES).length)}</strong><span>دسته اصلی</span></li>
@@ -168,15 +168,15 @@ const seo = {
       <div class="prose">
         <h2 id="about-title">چرا قبل از رفتن به تعمیرگاه، اینجا را ببینید؟</h2>
         <p>
-          در تهران برای هر برند ده‌ها تعمیرگاه هست؛ از نمایندگی‌های رسمی تا مغازه‌های پاساژ علاءالدین و چارسو. مشکل این است که
-          بیشترشان در سایت خودشان فقط از خوبی‌ها می‌گویند. ما هر مرکز را از چند منبع بررسی می‌کنیم و در کنار خدماتش، ضعف‌هایش را هم
-          می‌نویسیم؛ از نبود پارکینگ تا شلوغی روزهای آخر هفته.
+          در تهران برای هر برند ده ها تعمیرگاه هست؛ از نمایندگی های رسمی تا مغازه های پاساژ علاءالدین و چارسو. مشکل این است که
+          بیشترشان در سایت خودشان فقط از خوبی ها می گویند. ما هر مرکز را از چند منبع بررسی می کنیم و در کنار خدماتش، ضعف هایش را هم
+          می نویسیم؛ از نبود پارکینگ تا شلوغی روزهای آخر هفته.
         </p>
         <p>
-          اگر گوشی‌تان خراب شده، از <a href={postUrl(pillars.find((p) => p.data.category === "mobile-repairs")?.id ?? "")}>لیست کامل تعمیرگاه‌های موبایل تهران</a>
-          شروع کنید و اگر لپ‌تاپ دارید، <a href={postUrl(pillars.find((p) => p.data.category === "laptop-and-computer-repair")?.id ?? "")}>راهنمای جامع تعمیر لپ‌تاپ در تهران</a>
+          اگر گوشی تان خراب شده، از <a href={postUrl(pillars.find((p) => p.data.category === "mobile-repairs")?.id ?? "")}>لیست کامل تعمیرگاه های موبایل تهران</a>
+          شروع کنید و اگر لپ تاپ دارید، <a href={postUrl(pillars.find((p) => p.data.category === "laptop-and-computer-repair")?.id ?? "")}>راهنمای جامع تعمیر لپ تاپ در تهران</a>
           را ببینید. برای هر برند هم راهنمای جداگانه داریم که در
-          <a href={categoryUrl("mobile-repairs")}>دسته موبایل و گجت</a> و <a href={categoryUrl("laptop-and-computer-repair")}>دسته لپ‌تاپ و کامپیوتر</a> فهرست شده‌اند.
+          <a href={categoryUrl("mobile-repairs")}>دسته موبایل و گجت</a> و <a href={categoryUrl("laptop-and-computer-repair")}>دسته لپ تاپ و کامپیوتر</a> فهرست شده اند.
         </p>
       </div>
       <div>

@@ -4,21 +4,21 @@
 
 - Astro 5 (خروجی استاتیک، `trailingSlash: "always"`)
 - Content Collections با `glob` loader و اعتبارسنجی zod
-- astro-icon (مجموعه‌های `lucide` و `simple-icons`)
-- CSS اختصاصی با توکن‌های طراحی (Tailwind فقط برای preflight)
-- هاستینگ: Cloudflare Pages / Netlify (فایل‌های `_headers` و `_redirects`)
+- astro-icon (مجموعه های `lucide` و `simple-icons`)
+- CSS اختصاصی با توکن های طراحی (Tailwind فقط برای preflight)
+- هاستینگ: Cloudflare Pages با انتشار خودکار از گیت هاب (فایل های `_headers` و `_redirects`) — [deployment.md](deployment.md)
 
-## ساختار فایل‌ها
+## ساختار فایل ها
 
 ```
 src/
 ├── content.config.ts          اسکیمای مقالات (فیلدهای مراکز)
 ├── content/posts/*.md         ۱۸ مقاله
-├── data/site.ts               تنظیمات مرکزی: نام، تلفن، دسته‌ها، منو، آیکون برندها
+├── data/site.ts               تنظیمات مرکزی: نام، نام های جایگزین، لوگو، تلفن، دسته ها، منو، آیکون برندها
 ├── lib/
-│   ├── utils.ts               تاریخ شمسی، ارقام فارسی، تلفن، مارک‌داون درون‌خطی
-│   ├── posts.ts               دریافت مقالات، پیلار/کلاستر، مرتبط‌ها، شمارش کلمات
-│   └── schema.ts              سازنده‌های JSON-LD
+│   ├── utils.ts               تاریخ شمسی، ارقام فارسی، تلفن، مارک داون درون خطی
+│   ├── posts.ts               دریافت مقالات، پیلار/کلاستر، مرتبط ها، شمارش کلمات
+│   └── schema.ts              سازنده های JSON-LD
 ├── layouts/BaseLayout.astro
 ├── components/
 │   ├── SEO.astro              متا، canonical، OG، Twitter، JSON-LD
@@ -27,7 +27,7 @@ src/
 │   ├── PostCard.astro / FaqList.astro / Breadcrumbs.astro
 │   └── article/
 │       ├── CentersTable.astro جدول مقایسه ابتدای مقاله (موبایل: کارت)
-│       └── CenterCard.astro   کارت هر مرکز: توضیح، خدمات، قوت/ضعف، تماس، نقشه گوگل‌مپ جاسازی‌شده (lazy)، مسیریابی
+│       └── CenterCard.astro   کارت هر مرکز: توضیح، خدمات، قوت/ضعف، تماس، نقشه گوگل مپ جاسازی شده (lazy)، مسیریابی
 └── pages/
     ├── index.astro            صفحه اصلی
     ├── blog/index.astro       همه راهنماها (+ فیلتر ?q=)
@@ -35,41 +35,52 @@ src/
     ├── blog/category/[category].astro
     ├── about.astro / contact.astro / 404.astro
     ├── feed.xml.ts            RSS
-    └── search-index.json.ts   ایندکس جستجو (مقالات + تک‌تک مراکز)
-scripts/check-post.mjs         اعتبارسنجی محتوا
+    └── search-index.json.ts   ایندکس جستجو (مقالات + تک تک مراکز)
+scripts/check-post.mjs         اعتبارسنجی محتوا (+ کلاستر و LSI)
+scripts/check-schema.mjs       اعتبارسنجی JSON-LD خروجی
+scripts/apply-briefs.mjs       نوشتن بریف ها (scripts/data/keyword-briefs.json) در frontmatter
+scripts/build-icons.mjs        ساخت فاوآیکون و لوگو از assets/brand/ (docs/branding.md)
 ```
 
 ## سیستم طراحی (الهام از قالب دایرکتوری مرجع)
 
 | توکن | مقدار | کاربرد |
 |---|---|---|
-| `--brand` / `--brand-600` | `#3a9a2c` / `#2f8a24` | دکمه اصلی، خط زیر تیترها، پین کارت‌ها |
-| `--accent` | `#f3b21b` | دکمه «ثبت کسب‌وکار»، فیلترها، دکمه جستجو |
-| `--bg-soft` | `#f4f5f1` | پس‌زمینه بخش‌ها (با الگوی نقطه‌ای) |
+| `--brand` / `--brand-600` | `#3a9a2c` / `#2f8a24` | دکمه اصلی، خط زیر تیترها، پین کارت ها |
+| `--accent` | `#f3b21b` | دکمه «ثبت کسب وکار»، فیلترها، دکمه جستجو |
+| `--bg-soft` | `#f4f5f1` | پس زمینه بخش ها (با الگوی نقطه ای) |
 | `--footer` | `#272b2f` | فوتر تیره |
 | فونت | Vazirmatn (Medium / Black) | |
+| لوگو | `assets/brand/` → `public/` | [branding.md](branding.md) |
 
-الگوهای برگرفته از طرح مرجع: هدر سفید با دکمه کهربایی، هیرو تصویری با جستجوی کپسولی و انتخاب شهر، کاشی‌های «محبوب‌ترین» با دایره رنگی و عدد، فیلترهای کپسولی + کارت با پین سبز، بنر CTA با خط کهربایی، بخش «چطور کار می‌کند» سه‌مرحله‌ای، فوتر چهارستونه تیره.
+الگوهای برگرفته از طرح مرجع: هدر سفید با دکمه کهربایی، هیرو تصویری با جستجوی کپسولی و انتخاب شهر، کاشی های «محبوب ترین» با دایره رنگی و عدد، فیلترهای کپسولی + کارت با پین سبز، بنر CTA با خط کهربایی، بخش «چطور کار می کند» سه مرحله ای، فوتر چهارستونه تیره.
 
 ## صفحه اصلی
 
-هیرو + جستجو → کاشی همه راهنماها → کارت‌ها با فیلتر (همه/موبایل/لپ‌تاپ/اپل) → بنر ثبت کسب‌وکار → سه مرحله + آمار واقعی → متن معرفی با لینک به پیلارها + FAQ
+هیرو + جستجو → کاشی همه راهنماها → کارت ها با فیلتر (همه/موبایل/لپ تاپ/اپل) → بنر ثبت کسب وکار → سه مرحله + آمار واقعی → متن معرفی با لینک به پیلارها + FAQ
 
 ## صفحه مقاله
 
-بردکرامب → H1 + lead + متادیتا (تاریخ شمسی، تعداد مراکز، زمان مطالعه) → **جدول مقایسه** → کارت مراکز → بدنه راهنما → (پیلار: گرید برندها) → روش تهیه لیست → FAQ → مرتبط‌ها. سایدبار چسبان: فهرست مطالب، لینک پیلار، تماس مشاوره.
+بردکرامب → H1 + lead + متادیتا (تاریخ شمسی، تعداد مراکز، زمان مطالعه) → **جدول مقایسه** → کارت مراکز → بدنه راهنما → (پیلار: گرید برندها) → روش تهیه لیست → FAQ → مرتبط ها. سایدبار چسبان: فهرست مطالب، لینک پیلار، تماس مشاوره.
 
 ## دستورات
 
 ```bash
 npm run dev                                  # توسعه
 npm run build                                # بیلد
-node scripts/check-post.mjs src/content/posts/*.md   # اعتبارسنجی مقالات
+node scripts/check-post.mjs src/content/posts/*.md   # اعتبارسنجی مقالات (+ کلاستر کلمات کلیدی و LSI)
+node scripts/check-schema.mjs                        # اعتبارسنجی JSON-LD صفحات dist (بعد از build)
 ```
+
+> نصب در محیط هایی که به میرور چینی دسترسی ندارند: `package-lock.json` آدرس پکیج ها را روی `registry.npmmirror.com` دارد. اگر `npm ci` گیر کرد یا خطای 403 داد:
+> `npm ci --replace-registry-host=always --registry=https://registry.npmjs.org/`
 
 ## افزودن مقاله جدید
 
 1. طبق [content-guidelines.md](content-guidelines.md) فایل `src/content/posts/<slug>.md` بسازید.
 2. `node scripts/check-post.mjs src/content/posts/<slug>.md`
-3. `npm run build` — اسکیما، جدول، سایت‌مپ، فید، جستجو و لینک‌های قالب خودکار بروز می‌شوند.
-4. در پیلار مربوطه یک لینک متنی به مقاله جدید اضافه کنید.
+3. `npm run build` — اسکیما، جدول، سایت مپ، فید، جستجو و لینک های قالب خودکار بروز می شوند.
+4. `node scripts/check-schema.mjs`
+5. در پیلار مربوطه یک لینک متنی به مقاله جدید اضافه کنید.
+
+قبل از مرحله ۱، بریف کلمات کلیدی مقاله را طبق [keyword-briefs.md](keyword-briefs.md) بنویسید و `keywords` و `lsi` را در frontmatter پر کنید.
