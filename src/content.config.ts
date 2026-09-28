@@ -39,6 +39,8 @@ const posts = defineCollection({
     brand: z.string().optional(),
     city: z.string().default("تهران"),
     keyword: z.string(), // کلمه کلیدی اصلی
+    keywords: z.array(z.string()).default([]), // کلاستر کلمات کلیدی: کلمات فرعی و سؤال‌محور (docs/keyword-briefs.md)
+    lsi: z.array(z.string()).default([]), // کلمات LSI که باید در متن بیایند
     image: z.string(),
     imageAlt: z.string(),
     publishedTime: z.string(),

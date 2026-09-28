@@ -74,6 +74,31 @@ for (const file of files) {
   const wc = words(allText.replace(/\]\([^)]*\)/g, "]"));
   if (wc < 700) errors.push(`word count ${wc} < 700`);
 
+  // کلاستر کلمات کلیدی و LSI (docs/keyword-briefs.md)
+  // مقایسه بدون حساسیت به نیم‌فاصله/فاصله و ی/ك عربی
+  const norm = (s) => String(s).replace(/[‌\s]+/g, " ").replace(/ي/g, "ی").replace(/ك/g, "ک").toLowerCase();
+  const textN = norm([fm.title, fm.h1, fm.description, allText].join(" "));
+  const kw = fm.keywords || [];
+  const lsi = fm.lsi || [];
+  if (!kw.length || !lsi.length) warns.push("no keyword brief (keywords/lsi) — see docs/keyword-briefs.md");
+  else {
+    const missKw = kw.filter((k) => !textN.includes(norm(k)));
+    const missLsi = lsi.filter((k) => !textN.includes(norm(k)));
+    if (kw.length < 4) errors.push(`keywords cluster too small (${kw.length} < 4)`);
+    if (lsi.length < 10) errors.push(`lsi list too small (${lsi.length} < 10)`);
+    const cov = (lsi.length - missLsi.length) / lsi.length;
+    if (cov < 0.8) errors.push(`lsi coverage ${Math.round(cov * 100)}% < 80% → missing: ${missLsi.join("، ")}`);
+    else if (missLsi.length) warns.push(`lsi missing: ${missLsi.join("، ")}`);
+    if (missKw.length) errors.push(`cluster keywords not used: ${missKw.join("، ")}`);
+  }
+  if (fm.keyword) {
+    const k = norm(fm.keyword);
+    if (!norm(fm.h1 ?? fm.title).includes(k)) warns.push("main keyword not in h1");
+    if (!norm(fm.lead).includes(k)) warns.push("main keyword not in lead");
+    const h2s = [...body.matchAll(/^## (.+)$/gm)].map((x) => norm(x[1]));
+    if (!h2s.some((h) => h.includes(k))) warns.push("main keyword not in any H2");
+  }
+
   const links = [...allText.matchAll(/\]\((\/[^)\s]*)\)/g)].map((x) => x[1].split("#")[0]);
   links.forEach((l) => {
     const mm = l.match(/^\/blog\/([a-z0-9-]+)\/$/);

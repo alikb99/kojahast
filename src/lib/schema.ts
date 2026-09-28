@@ -20,7 +20,10 @@ export function organization() {
     email: SITE.email,
     telephone: phoneIntl(SITE.phone),
     address: { "@type": "PostalAddress", streetAddress: SITE.address, addressLocality: "تهران", addressCountry: "IR" },
-    sameAs: Object.values(SITE.socials).filter(Boolean),
+    ...(() => {
+      const same = Object.values(SITE.socials).filter(Boolean);
+      return same.length ? { sameAs: same } : {};
+    })(),
   };
 }
 
@@ -110,7 +113,7 @@ export function articleGraph(post: Post, url: string, crumbs: Crumb[], wordCount
         "@type": "LocalBusiness",
         "@id": `${pageUrl}#${c.id}`,
         name: c.name,
-        url: `${pageUrl}#${c.id}`,
+        url: c.website ?? `${pageUrl}#${c.id}`,
         description: plain(c.summary[0]).slice(0, 300),
         image,
         address: {
@@ -156,8 +159,9 @@ export function articleGraph(post: Post, url: string, crumbs: Crumb[], wordCount
       dateModified: d.modifiedTime,
       inLanguage: SITE.lang,
       wordCount,
-      articleSection: crumbs[crumbs.length - 2]?.name,
-      keywords: [d.keyword, d.brand].filter(Boolean).join("، "),
+      // crumbs[1] همیشه دسته است؛ در کلاسترها crumbs[length-2] پیلار می‌شد
+      articleSection: crumbs[1]?.name,
+      keywords: [...new Set([d.keyword, ...d.keywords, ...d.lsi, d.brand].filter(Boolean))].join("، "),
       author: { "@type": "Organization", name: `تیم تحریریه ${SITE.name}`, url: abs("/about/") },
       publisher: { "@id": ORG_ID },
       mainEntityOfPage: { "@id": `${pageUrl}#webpage` },

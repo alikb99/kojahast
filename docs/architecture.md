@@ -64,12 +64,19 @@ scripts/check-post.mjs         اعتبارسنجی محتوا
 ```bash
 npm run dev                                  # توسعه
 npm run build                                # بیلد
-node scripts/check-post.mjs src/content/posts/*.md   # اعتبارسنجی مقالات
+node scripts/check-post.mjs src/content/posts/*.md   # اعتبارسنجی مقالات (+ کلاستر کلمات کلیدی و LSI)
+node scripts/check-schema.mjs                        # اعتبارسنجی JSON-LD صفحات dist (بعد از build)
 ```
+
+> نصب در محیط‌هایی که به میرور چینی دسترسی ندارند: `package-lock.json` آدرس پکیج‌ها را روی `registry.npmmirror.com` دارد. اگر `npm ci` گیر کرد یا خطای 403 داد:
+> `npm ci --replace-registry-host=always --registry=https://registry.npmjs.org/`
 
 ## افزودن مقاله جدید
 
 1. طبق [content-guidelines.md](content-guidelines.md) فایل `src/content/posts/<slug>.md` بسازید.
 2. `node scripts/check-post.mjs src/content/posts/<slug>.md`
 3. `npm run build` — اسکیما، جدول، سایت‌مپ، فید، جستجو و لینک‌های قالب خودکار بروز می‌شوند.
-4. در پیلار مربوطه یک لینک متنی به مقاله جدید اضافه کنید.
+4. `node scripts/check-schema.mjs`
+5. در پیلار مربوطه یک لینک متنی به مقاله جدید اضافه کنید.
+
+قبل از مرحله ۱، بریف کلمات کلیدی مقاله را طبق [keyword-briefs.md](keyword-briefs.md) بنویسید و `keywords` و `lsi` را در frontmatter پر کنید.
