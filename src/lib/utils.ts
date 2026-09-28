@@ -51,6 +51,7 @@ export function inlineMd(s: string) {
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, text, href) => {
       const external = /^https?:\/\//.test(href) && !href.startsWith(SITE.url);
+      if (external && !SITE.showWebsites) return text; // لینک سایت‌های خارجی بدون اجازه منتشر نمی‌شود
       return external
         ? `<a href="${href}" target="_blank" rel="nofollow noopener noreferrer">${text}</a>`
         : `<a href="${href}">${text}</a>`;

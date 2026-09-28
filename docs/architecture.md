@@ -27,7 +27,7 @@ src/
 │   ├── PostCard.astro / FaqList.astro / Breadcrumbs.astro
 │   └── article/
 │       ├── CentersTable.astro جدول مقایسه ابتدای مقاله (موبایل: کارت)
-│       └── CenterCard.astro   کارت هر مرکز: توضیح، خدمات، قوت/ضعف، تماس، مسیریابی
+│       └── CenterCard.astro   کارت هر مرکز: توضیح، خدمات، قوت/ضعف، تماس، نقشه گوگل‌مپ جاسازی‌شده (lazy)، مسیریابی
 └── pages/
     ├── index.astro            صفحه اصلی
     ├── blog/index.astro       همه راهنماها (+ فیلتر ?q=)

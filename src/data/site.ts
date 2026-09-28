@@ -17,6 +17,11 @@ export const SITE = {
   email: "support@kojahast.ir",
   address: "تهران، خیابان مطهری، خیابان قائم‌مقام فراهانی، پلاک ۱۵۸",
   hours: "شنبه تا پنجشنبه، ۹ تا ۱۸",
+  /**
+   * نمایش آدرس وب‌سایت مراکز (کارت، اسکیما و لینک‌های خارجی متن).
+   * به درخواست مدیر سایت خاموش است؛ داده‌ها در frontmatter محفوظ می‌مانند.
+   */
+  showWebsites: false,
   defaultImage: "/images/best-mobile-phone-repairs-in-tehran.webp",
   /** لوگوی مربعی (نماد ذره‌بین) برای اسکیمای Organization — گوگل حداقل ۱۱۲×۱۱۲ می‌خواهد */
   logo: "/images/logo-square-512.png",

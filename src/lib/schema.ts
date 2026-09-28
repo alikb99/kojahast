@@ -113,7 +113,7 @@ export function articleGraph(post: Post, url: string, crumbs: Crumb[], wordCount
         "@type": "LocalBusiness",
         "@id": `${pageUrl}#${c.id}`,
         name: c.name,
-        url: c.website ?? `${pageUrl}#${c.id}`,
+        url: (SITE.showWebsites && c.website) || `${pageUrl}#${c.id}`,
         description: plain(c.summary[0]).slice(0, 300),
         image,
         address: {
@@ -127,7 +127,7 @@ export function articleGraph(post: Post, url: string, crumbs: Crumb[], wordCount
         ...(c.lat && c.lng ? { geo: { "@type": "GeoCoordinates", latitude: c.lat, longitude: c.lng } } : {}),
         ...(() => {
           const same = [
-            c.website,
+            SITE.showWebsites ? c.website : undefined,
             c.instagram ? instagramUrl(c.instagram) : undefined,
             c.telegram ? telegramUrl(c.telegram) : undefined,
           ].filter(Boolean);
