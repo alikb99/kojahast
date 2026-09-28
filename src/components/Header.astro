@@ -1,0 +1,421 @@
+---
+const nav = [
+  { label: "تعمیرات موبایل", href: "/blog/category/mobile-repairs/" },
+  { label: "تعمیرات لپ تاپ", href: "/blog/category/laptop-and-computer-repair/" },
+  { label: "تماس با ما", href: "/contact/" },
+  { label: "درباره ما", href: "/about/" },
+];
+
+const phone = "02191300348";
+const phoneHref = `tel:${phone}`;
+---
+
+<header class="site-header" data-header>
+  <div class="header-inner">
+    <!-- Desktop: right logo | center menu | left call button -->
+    <div class="desktop">
+      <div class="right">
+        <a class="brand" href="/" aria-label="صفحه اصلی کجا هست">
+          <span class="brand-mark" aria-hidden="true">📍</span>
+          <span class="brand-text">کجا هست</span>
+        </a>
+      </div>
+
+      <nav class="center" aria-label="منوی اصلی">
+        <ul class="nav">
+          {nav.map((item) => (
+            <li>
+              <a class="nav-link" href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="left">
+        <a class="call-btn" href={phoneHref}>
+          تماس مستقیم
+          <span class="call-num">{phone}</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile: left logo | right hamburger -->
+    <div class="mobile">
+      <a class="brand" href="/" aria-label="صفحه اصلی کجا هست">
+        <span class="brand-mark" aria-hidden="true">📍</span>
+        <span class="brand-text">کجا هست</span>
+      </a>
+
+      <button class="burger" type="button" aria-label="باز کردن منو" aria-expanded="false" data-burger>
+  <span class="burger-lines" aria-hidden="true">
+    <span></span><span></span><span></span>
+  </span>
+</button>
+
+    </div>
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div class="drawer" data-drawer aria-hidden="true">
+    <div class="drawer-panel" role="dialog" aria-label="منوی موبایل">
+      <div class="drawer-head">
+        <span class="drawer-title">منو</span>
+        <button class="drawer-close" type="button" aria-label="بستن منو" data-close>✕</button>
+      </div>
+
+      <nav aria-label="منوی موبایل">
+        <ul class="drawer-nav">
+          {nav.map((item) => (
+            <li>
+              <a class="drawer-link" href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="drawer-foot">
+        <a class="drawer-call" href={phoneHref}>
+          تماس مستقیم
+          <span class="drawer-call-num">{phone}</span>
+        </a>
+      </div>
+    </div>
+
+    <button class="drawer-backdrop" type="button" aria-label="بستن" data-backdrop></button>
+  </div>
+</header>
+
+<!-- Mobile bottom fixed call button -->
+<a class="mobile-callbar" href={phoneHref} aria-label="تماس مستقیم با {phone}">
+  تماس مستقیم
+  <span class="mobile-callbar-num">{phone}</span>
+</a>
+
+<script is:inline>
+  const header = document.querySelector("[data-header]");
+  const burger = document.querySelector("[data-burger]");
+  const drawer = document.querySelector("[data-drawer]");
+  const closeBtn = document.querySelector("[data-close]");
+  const backdrop = document.querySelector("[data-backdrop]");
+
+  // Sticky glass on scroll
+  const onScroll = () => {
+    const scrolled = window.scrollY > 8;
+    header.classList.toggle("is-scrolled", scrolled);
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  // Drawer helpers
+  const openDrawer = () => {
+    drawer.classList.add("open");
+    drawer.setAttribute("aria-hidden", "false");
+    burger.setAttribute("aria-expanded", "true");
+    document.documentElement.classList.add("no-scroll");
+  };
+
+  const closeDrawer = () => {
+    drawer.classList.remove("open");
+    drawer.setAttribute("aria-hidden", "true");
+    burger.setAttribute("aria-expanded", "false");
+    document.documentElement.classList.remove("no-scroll");
+  };
+
+  burger?.addEventListener("click", () => {
+    drawer.classList.contains("open") ? closeDrawer() : openDrawer();
+  });
+
+  closeBtn?.addEventListener("click", closeDrawer);
+  backdrop?.addEventListener("click", closeDrawer);
+
+  // Close on ESC
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawer.classList.contains("open")) closeDrawer();
+  });
+
+  // Close after click on a link
+  drawer?.addEventListener("click", (e) => {
+    const a = e.target.closest("a");
+    if (a) closeDrawer();
+  });
+</script>
+
+<style>
+  :global(html.no-scroll),
+  :global(html.no-scroll body) {
+    overflow: hidden;
+  }
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid transparent;
+    transition: background 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+    background: rgba(255,255,255,0);
+  }
+
+  .site-header.is-scrolled {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom-color: var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .header-inner {
+    padding: 10px 0;
+  }
+
+  /* Desktop */
+  .desktop {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .right, .left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .right { justify-content: flex-end; }
+  .left  { justify-content: flex-start; }
+  .center { flex: 2; display: flex; justify-content: center; }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 16px;
+    color: inherit;
+  }
+
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: rgba(11,18,32,0.06);
+    font-weight: 900;
+  }
+
+  .brand-text {
+    font-weight: 900;
+    letter-spacing: -0.2px;
+  }
+
+  .nav {
+    list-style: none;
+    display: inline-flex;
+    gap: 6px;
+    padding: 6px;
+    margin: 0;
+    border-radius: 20px;
+    background: rgba(11,18,32,0.04);
+    border: 1px solid rgba(11,18,32,0.06);
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 16px;
+    color: rgba(11,18,32,0.92);
+    font-weight: 900;
+    font-size: 14px;
+    transition: background 150ms ease, transform 150ms ease;
+  }
+
+  .nav-link:hover {
+    background: rgba(255,255,255,0.75);
+    transform: translateY(-1px);
+  }
+
+  .call-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 18px;
+    color: rgba(255,255,255,0.95);
+    background: var(--accent);
+    border: 1px solid rgba(11,18,32,0.08);
+    font-weight: 900;
+    white-space: nowrap;
+    transition: transform 150ms ease, filter 150ms ease;
+  }
+  .call-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
+
+  .call-num {
+    font-weight: 900;
+    opacity: 0.9;
+    font-size: 13px;
+    direction: ltr;
+  }
+
+  /* Mobile: burger LEFT, logo RIGHT */
+  .mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    direction: ltr; /* خیلی مهم: باعث میشه چپ/راست واقعی بشه */
+  }
+  .mobile .brand { direction: rtl; } /* متن فارسی درست بماند */
+
+  .burger {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    border: 1px solid rgba(11,18,32,0.10);
+    background: rgba(255,255,255,0.75);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+  }
+  .burger-lines {
+    width: 18px;
+    display: grid;
+    gap: 4px;
+  }
+  .burger-lines span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: rgba(11,18,32,0.85);
+    border-radius: 999px;
+  }
+
+  /* Drawer */
+  .drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+  }
+  .drawer.open { pointer-events: auto; }
+
+  .drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.32);
+    opacity: 0;
+    transition: opacity 180ms ease;
+    border: 0;
+    pointer-events: auto;
+  }
+
+  .drawer-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: min(88vw, 360px);
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-right: 1px solid rgba(11,18,32,0.10);
+    transform: translateX(-101%);
+    transition: transform 220ms ease;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 2; /* از backdrop بالاتر */
+    pointer-events: auto; /* لینک‌ها کلیک‌پذیر */
+  }
+
+  .drawer.open .drawer-panel { transform: translateX(0); }
+  .drawer.open .drawer-backdrop { opacity: 1; }
+
+  .drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 6px 10px;
+  }
+
+  .drawer-title { font-weight: 900; }
+  .drawer-close {
+    width: 40px;
+    height: 40px;
+    border-radius: 16px;
+    border: 1px solid rgba(11,18,32,0.10);
+    background: rgba(255,255,255,0.9);
+    cursor: pointer;
+  }
+
+  .drawer-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+
+  .drawer-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 12px;
+    border-radius: 18px;
+    color: rgba(11,18,32,0.92);
+    font-weight: 900;
+    background: rgba(11,18,32,0.04);
+    border: 1px solid rgba(11,18,32,0.06);
+  }
+
+  .drawer-foot {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid rgba(11,18,32,0.08);
+  }
+
+  .drawer-call {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 12px;
+    border-radius: 18px;
+    color: rgba(11,18,32,0.95);
+    background: rgba(11,18,32,0.06);
+    border: 1px solid rgba(11,18,32,0.08);
+    font-weight: 900;
+  }
+  .drawer-call-num { direction: ltr; font-weight: 900; }
+
+  /* Mobile bottom call bar */
+  .mobile-callbar {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 14px;
+    border-radius: 20px;
+    color: rgba(255,255,255,0.95);
+    background: var(--accent);
+    border: 1px solid rgba(11,18,32,0.10);
+    box-shadow: var(--shadow-md);
+    font-weight: 900;
+  }
+  .mobile-callbar-num { direction: ltr; font-weight: 900; }
+
+  @media (min-width: 1024px) {
+    .desktop { display: flex; }
+    .mobile { display: none; }
+    .mobile-callbar { display: none; }
+    .drawer { display: none; }
+  }
+</style>

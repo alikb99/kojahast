@@ -1,0 +1,147 @@
+---
+import { Icon } from "astro-icon/components";
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer-container">
+    <!-- معرفی سایت -->
+    <div class="footer-about">
+      <h3>کجا هست</h3>
+      <p>
+        «کجا هست» مرجع معرفی مراکز تخصصی تعمیرات موبایل، لپ‌تاپ و
+        گجت‌های دیجیتال در تهران است. تلاش ما کمک به انتخاب آگاهانه،
+        سریع و مطمئن کاربران است.
+      </p>
+    </div>
+
+    <!-- لینک‌های سریع -->
+    <div class="footer-links">
+      <h4>لینک‌های سریع</h4>
+      <ul>
+        <li>
+          <a href="/blog/category/mobile-repairs/">تعمیرات موبایل</a>
+        </li>
+        <li>
+          <a href="/blog/category/laptop-repairs/">تعمیرات لپ تاپ</a>
+        </li>
+        <li>
+          <a href="/about/">درباره ما</a>
+        </li>
+        <li>
+          <a href="/contact/">تماس با ما</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- شبکه‌های اجتماعی -->
+    <div class="footer-social">
+      <h4>ما را دنبال کنید</h4>
+      <div class="social-icons">
+        <a href="#" aria-label="Instagram">
+          <Icon name="simple-icons:instagram" size={22} />
+        </a>
+        <a href="#" aria-label="Telegram">
+          <Icon name="simple-icons:telegram" size={22} />
+        </a>
+        <a href="#" aria-label="WhatsApp">
+          <Icon name="simple-icons:whatsapp" size={22} />
+        </a>
+        <a href="#" aria-label="YouTube">
+          <Icon name="simple-icons:youtube" size={22} />
+        </a>
+        <a href="#" aria-label="LinkedIn">
+          <Icon name="simple-icons:linkedin" size={22} />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- کپی رایت -->
+  <div class="footer-bottom">
+    <p>
+      © {year} تمامی حقوق این وب‌سایت متعلق به <strong>کجا هست</strong> می‌باشد.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: #0f172a;
+    color: #e5e7eb;
+    margin-top: 4rem;
+  }
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+  }
+
+  .footer h3,
+  .footer h4 {
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-about p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #cbd5f5;
+  }
+
+  .footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-links li {
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-links a {
+    color: #cbd5f5;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer-links a:hover {
+    color: #38bdf8;
+  }
+
+  .footer-social .social-icons {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: #e5e7eb;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .footer-social a:hover {
+    background: #38bdf8;
+    color: #020617;
+    transform: translateY(-2px);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.85rem;
+    color: #94a3b8;
+  }
+</style>

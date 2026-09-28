@@ -1,0 +1,674 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const brand = {
+  name: "کجاست؟",
+  description:
+    "برای پشتیبانی، همکاری، پیشنهادها و گزارش مشکل، از همین صفحه با ما در ارتباط باشید.",
+};
+
+const contact = {
+  email: "support@kojahast.ir",
+  phone: "021-91300348",
+  hours: "هر روز ۹ تا ۱۸",
+  address: "تهران، خیابان مطهری، ابتدای خیابان قائم مقام فراهانی جنوبی، پلاک 158، ساختمان برتر سرویس",
+};
+
+const socials = [
+  { name: "اینستاگرام", handle: "@kojahast", href: "https://instagram.com/kojahast" },
+  { name: "تلگرام", handle: "@kojahast", href: "https://t.me/kojahast" },
+  { name: "ایکس", handle: "@kojahast", href: "https://x.com/kojahast" },
+];
+
+const topics = [
+  { key: "support", label: "پشتیبانی و مشکل فنی" },
+  { key: "business", label: "همکاری و تبلیغات" },
+  { key: "data", label: "اصلاح اطلاعات مکان‌ها" },
+  { key: "feedback", label: "پیشنهاد و بازخورد" },
+];
+
+const faqs = [
+  {
+    q: "چقدر طول می‌کشه پاسخ بدید؟",
+    a: "معمولاً کمتر از ۲۴ ساعت کاری. درخواست‌های فوری پشتیبانی اولویت بالاتری دارند.",
+  },
+  {
+    q: "برای اصلاح اطلاعات یک مکان چی کار کنم؟",
+    a: "اگر داخل سایت گزینه «گزارش مشکل/اصلاح» دارید از همان استفاده کنید. در غیر این صورت، لینک مکان + توضیح اصلاح را در فرم ارسال کنید.",
+  },
+  {
+    q: "برای همکاری با کسب‌وکارها چه اطلاعاتی لازم است؟",
+    a: "نام کسب‌وکار، شهر، نوع همکاری (تبلیغ/ثبت ویژه/داده)، و یک راه ارتباطی کافی است.",
+  },
+];
+---
+
+<BaseLayout
+  {...({ title: `تماس با ما | ${brand.name}`, description: brand.description } as any)}
+>
+  <main class="page">
+    <!-- HERO -->
+    <header class="hero">
+      <div class="hero__bg" aria-hidden="true"></div>
+
+      <div class="container hero__content">
+        <div class="hero__badge">
+          <span class="dot" aria-hidden="true"></span>
+          تماس با {brand.name}
+        </div>
+
+        <h1 class="hero__title">با ما در ارتباط باش</h1>
+        <p class="hero__lead">
+          {brand.description}
+          <span class="muted"> — پاسخ‌گویی سریع، شفاف و محترمانه.</span>
+        </p>
+
+        <div class="quick">
+          <a class="pill" href={`mailto:${contact.email}`}>
+            <span class="pill__icon" aria-hidden="true">✉️</span>
+            <span class="pill__label">ایمیل</span>
+            <span class="pill__value">{contact.email}</span>
+          </a>
+
+          <a class="pill" href={`tel:${contact.phone.replaceAll("-", "").replaceAll(" ", "")}`}>
+            <span class="pill__icon" aria-hidden="true">📞</span>
+            <span class="pill__label">تلفن</span>
+            <span class="pill__value">{contact.phone}</span>
+          </a>
+
+          <div class="pill" role="note" aria-label="ساعات پاسخ‌گویی">
+            <span class="pill__icon" aria-hidden="true">⏰</span>
+            <span class="pill__label">پاسخ‌گویی</span>
+            <span class="pill__value">{contact.hours}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <section class="section">
+      <div class="container grid">
+        <!-- FORM -->
+        <div class="card card--form">
+          <div class="card__head">
+            <h2 class="h2">ارسال پیام</h2>
+            <p class="text muted">
+              لطفاً موضوع را انتخاب کنید تا پیام شما سریع‌تر به تیم مرتبط برسد.
+            </p>
+          </div>
+
+          <!--
+            NOTE:
+            - این فرم فعلاً اکشن ندارد. اگر API/endpoint داری، action را تنظیم کن.
+            - اگر از Netlify/Vercel Forms استفاده می‌کنی می‌تونیم تنظیمش کنیم.
+          -->
+          <form class="form" method="post" action="#">
+            <div class="row">
+              <label class="field">
+                <span class="field__label">نام و نام خانوادگی</span>
+                <input
+                  class="input"
+                  type="text"
+                  name="name"
+                  placeholder="مثلاً: مهدی رحیمی"
+                  autocomplete="name"
+                  required
+                />
+              </label>
+
+              <label class="field">
+                <span class="field__label">ایمیل</span>
+                <input
+                  class="input"
+                  type="email"
+                  name="email"
+                  placeholder="name@example.com"
+                  autocomplete="email"
+                  required
+                />
+              </label>
+            </div>
+
+            <div class="row">
+              <label class="field">
+                <span class="field__label">موضوع</span>
+                <select class="input" name="topic" required>
+                  <option value="" selected disabled>انتخاب کنید…</option>
+                  {topics.map((t) => (
+                    <option value={t.key}>{t.label}</option>
+                  ))}
+                </select>
+              </label>
+
+              <label class="field">
+                <span class="field__label">شماره تماس (اختیاری)</span>
+                <input
+                  class="input"
+                  type="tel"
+                  name="phone"
+                  placeholder="۰۹۱۲۱۲۳۴۵۶۷"
+                  autocomplete="tel"
+                  inputmode="tel"
+                />
+              </label>
+            </div>
+
+            <label class="field">
+              <span class="field__label">عنوان پیام</span>
+              <input
+                class="input"
+                type="text"
+                name="subject"
+                placeholder="در یک جمله کوتاه…"
+                required
+              />
+            </label>
+
+            <label class="field">
+              <span class="field__label">متن پیام</span>
+              <textarea
+                class="input textarea"
+                name="message"
+                placeholder="جزئیات را بنویسید… (اگر مربوط به یک مکان است، لینک همان مکان را هم بگذارید)"
+                rows={7}
+                required
+              ></textarea>
+            </label>
+
+            <div class="form__footer">
+              <label class="check">
+                <input type="checkbox" required />
+                <span>با ارسال پیام، با قوانین و حریم خصوصی موافقم.</span>
+              </label>
+
+              <button class="btn btn--primary" type="submit">
+                ارسال پیام
+                <span class="btn__icon" aria-hidden="true">↗</span>
+              </button>
+            </div>
+
+            <p class="hint">
+              برای گزارش مشکلات حساس، بهتر است از ایمیل استفاده کنید:
+              <a class="link" href={`mailto:${contact.email}`}>{contact.email}</a>
+            </p>
+          </form>
+        </div>
+
+        <!-- INFO -->
+        <aside class="side">
+          <div class="card card--soft">
+            <h3 class="h3">راه‌های ارتباطی</h3>
+
+            <div class="info">
+              <div class="info__item">
+                <div class="info__k">ایمیل</div>
+                <a class="info__v link" href={`mailto:${contact.email}`}>{contact.email}</a>
+              </div>
+
+              <div class="info__item">
+                <div class="info__k">تلفن</div>
+                <a class="info__v link" href={`tel:${contact.phone.replaceAll("-", "").replaceAll(" ", "")}`}>
+                  {contact.phone}
+                </a>
+              </div>
+
+              <div class="info__item">
+                <div class="info__k">ساعات</div>
+                <div class="info__v">{contact.hours}</div>
+              </div>
+
+              <div class="info__item">
+                <div class="info__k">آدرس</div>
+                <div class="info__v">{contact.address}</div>
+              </div>
+            </div>
+
+            <div class="divider" role="separator" aria-hidden="true"></div>
+
+            <h3 class="h3">شبکه‌های اجتماعی</h3>
+            <div class="socials">
+              {socials.map((s) => (
+                <a class="social" href={s.href} target="_blank" rel="noreferrer">
+                  <span class="social__name">{s.name}</span>
+                  <span class="social__handle">{s.handle}</span>
+                  <span class="social__icon" aria-hidden="true">↗</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div class="card card--border">
+            <h3 class="h3">راهنمای سریع برای پیام بهتر</h3>
+            <ul class="bullets">
+              <li>اگر مربوط به یک مکان است، لینک صفحه مکان را ارسال کنید.</li>
+              <li>برای مشکلات فنی، مرورگر/موبایل و نسخه را بنویسید.</li>
+              <li>اگر خطای خاصی دیدید، متن خطا را کپی کنید.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section section--alt">
+      <div class="container">
+        <div class="section__head">
+          <h2 class="h2">سوالات پرتکرار</h2>
+          <p class="text muted">قبل از ارسال پیام، شاید جواب اینجا باشد.</p>
+        </div>
+
+        <div class="faq">
+          {faqs.map((f) => (
+            <details class="faq__item">
+              <summary class="faq__q">{f.q}</summary>
+              <p class="faq__a">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+      <div class="container cta__inner">
+        <div class="cta__copy">
+          <h2 class="cta__title">می‌خوای همکاری کنیم؟</h2>
+          <p class="cta__desc">
+            اگر کسب‌وکار داری یا دوست داری داده‌ها و کیفیت تجربه بهتر بشه، پیام بده.
+          </p>
+        </div>
+        <div class="cta__actions">
+          <a class="btn btn--primary" href="tel:02191300348">
+            همکاری با ما
+            <span class="btn__icon" aria-hidden="true">↗</span>
+          </a>
+          <a class="btn btn--ghost" href={`mailto:${contact.email}`}>
+            ایمیل مستقیم
+            <span class="btn__icon" aria-hidden="true">✉️</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <style>
+    :global(:root) {
+      --bg: #070b14;
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.68);
+      --muted2: rgba(255, 255, 255, 0.56);
+      --border: rgba(255, 255, 255, 0.14);
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+      --accent: #7c5cff;
+      --accent2: #28d1ff;
+      --radius: 18px;
+      --radius2: 22px;
+      --max: 1120px;
+      color-scheme: dark;
+    }
+
+    .page {
+      min-height: 60dvh;
+      background: radial-gradient(1200px 700px at 75% 0%, rgba(124, 92, 255, 0.18), transparent 55%),
+        radial-gradient(900px 600px at 15% 10%, rgba(40, 209, 255, 0.14), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      padding-bottom: 28px;
+    }
+
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 48px 0 26px;
+    }
+
+    .hero__bg {
+      position: absolute;
+      inset: -2px;
+      background:
+        radial-gradient(900px 500px at 70% 10%, rgba(124, 92, 255, 0.25), transparent 55%),
+        radial-gradient(900px 550px at 15% 40%, rgba(40, 209, 255, 0.16), transparent 55%),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.05), transparent 45%);
+      pointer-events: none;
+    }
+
+    .hero__content { position: relative; }
+
+    .hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--muted);
+      font-size: 14px;
+      backdrop-filter: blur(10px);
+    }
+
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.14);
+    }
+
+    .hero__title {
+      margin: 16px 0 8px;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.2;
+      letter-spacing: -0.6px;
+    }
+
+    .hero__lead {
+      margin: 0;
+      max-width: 70ch;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.9;
+    }
+
+    .quick {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .pill {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      grid-template-rows: auto auto;
+      column-gap: 10px;
+      row-gap: 2px;
+      align-items: center;
+      padding: 12px 12px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .pill:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .pill__icon {
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(124, 92, 255, 0.14);
+      border: 1px solid rgba(124, 92, 255, 0.18);
+      grid-row: 1 / span 2;
+    }
+
+    .pill__label { color: var(--muted2); font-size: 12px; }
+    .pill__value { font-weight: 800; font-size: 13px; }
+
+    /* SECTION / GRID */
+    .section { padding: 28px 0; }
+    .section--alt {
+      background: rgba(255, 255, 255, 0.03);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .card {
+      border-radius: var(--radius2);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .card--form {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .card--soft {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .card--border {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .card__head { margin-bottom: 12px; }
+
+    .h2 { margin: 0 0 6px; font-size: 20px; letter-spacing: -0.3px; }
+    .h3 { margin: 0 0 10px; font-size: 15px; letter-spacing: -0.2px; }
+    .text { margin: 0 0 10px; }
+    .muted { color: var(--muted); }
+
+    /* FORM */
+    .form { display: grid; gap: 12px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .field { display: grid; gap: 6px; }
+    .field__label { font-size: 13px; color: rgba(255, 255, 255, 0.82); }
+
+    .input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 11px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.28);
+      color: rgba(255, 255, 255, 0.92);
+      outline: none;
+      transition: border-color 140ms ease, background 140ms ease;
+    }
+
+    .input:focus {
+      border-color: rgba(40, 209, 255, 0.55);
+      background: rgba(0, 0, 0, 0.34);
+    }
+
+    .textarea { resize: vertical; min-height: 160px; }
+
+    .form__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .check {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      user-select: none;
+    }
+
+    .check input { accent-color: var(--accent2); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.92);
+      font-weight: 900;
+      font-size: 14px;
+      transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .btn--primary {
+      background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(40, 209, 255, 0.85));
+      border-color: rgba(255, 255, 255, 0.20);
+    }
+
+    .btn--ghost { background: rgba(255, 255, 255, 0.03); }
+    .btn__icon { opacity: 0.95; }
+
+    .hint {
+      margin: 0;
+      color: var(--muted2);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .link {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: underline;
+      text-decoration-color: rgba(40, 209, 255, 0.45);
+      text-underline-offset: 3px;
+    }
+
+    /* SIDE */
+    .side { display: grid; gap: 12px; }
+
+    .info {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .info__item {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .info__k { color: var(--muted2); font-size: 13px; }
+    .info__v { font-weight: 900; font-size: 13px; }
+
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.10);
+      margin: 14px 0;
+    }
+
+    .socials { display: grid; gap: 10px; }
+
+    .social {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+    }
+
+    .social:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .social__name { font-weight: 900; }
+    .social__handle { color: var(--muted); font-size: 13px; }
+    .social__icon { color: rgba(255, 255, 255, 0.85); }
+
+    .bullets {
+      margin: 0;
+      padding: 0 18px 0 0;
+      color: var(--muted);
+    }
+    .bullets li { margin: 8px 0; }
+
+    /* FAQ */
+    .section__head { margin-bottom: 14px; }
+
+    .faq { display: grid; gap: 10px; }
+    .faq__item {
+      padding: 14px 16px;
+      border-radius: var(--radius2);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .faq__q {
+      cursor: pointer;
+      font-weight: 900;
+      list-style: none;
+    }
+    .faq__q::-webkit-details-marker { display: none; }
+    .faq__a { margin: 10px 0 0; color: var(--muted); font-size: 14px; }
+
+    /* CTA */
+    .cta { padding: 26px 0 46px; }
+
+    .cta__inner {
+      border-radius: 28px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: linear-gradient(135deg, rgba(124, 92, 255, 0.14), rgba(40, 209, 255, 0.08));
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .cta__title { margin: 0 0 6px; font-size: 18px; }
+    .cta__desc { margin: 0; color: var(--muted); }
+
+    .cta__actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 980px) {
+      .quick { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .row { grid-template-columns: 1fr; }
+      .cta__inner { grid-template-columns: 1fr; }
+      .cta__actions { justify-content: flex-start; }
+    }
+
+    :global(:focus-visible) {
+      outline: 2px solid rgba(40, 209, 255, 0.7);
+      outline-offset: 2px;
+      border-radius: 12px;
+    }
+  </style>
+</BaseLayout>

@@ -1,0 +1,496 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const brand = {
+  name: "کجاست؟",
+  tagline: "مسیر پیدا کردن، ساده‌تر از همیشه.",
+  description:
+    "ما در کجاست؟ کمک می‌کنیم سریع‌تر، دقیق‌تر و مطمئن‌تر مقصدها، کسب‌وکارها و خدمات اطرافت رو پیدا کنی؛ با تجربه‌ای روان، نتایج قابل اعتماد و اطلاعات به‌روز.",
+};
+
+const stats = [
+  { label: "مکان‌های ثبت‌شده", value: "۱۲۰K+" },
+  { label: "جستجوی روزانه", value: "۴۵K+" },
+  { label: "میانگین زمان یافتن مقصد", value: "۹ ثانیه" },
+  { label: "رضایت کاربران", value: "۴.۸/۵" },
+];
+
+const values = [
+  { title: "اعتماد", desc: "شفافیت، دقت و پاسخ‌گویی؛ پایه‌ی هر تصمیم خوبه.", icon: "🛡️" },
+  { title: "سادگی", desc: "تجربه‌ی روان، بدون شلوغی — سریع به نتیجه می‌رسی.", icon: "✨" },
+  { title: "به‌روز بودن", desc: "تغییرات سریع ثبت می‌شن تا همیشه دقیق باشیم.", icon: "⚡" },
+  { title: "کاربرمحوری", desc: "هر ویژگی از دل نیاز واقعی کاربران میاد.", icon: "🤝" },
+];
+
+const timeline = [
+  { year: "۱۴۰۲", title: "شروع ایده", desc: "یک مشکل واقعی تبدیل شد به یک محصول واقعی." },
+  { year: "۱۴۰۳", title: "نسخه‌ی اولیه", desc: "با بازخورد کاربران، تجربه جستجو دقیق‌تر شد." },
+  { year: "۱۴۰۴", title: "گسترش کیفیت", desc: "تمرکز جدی روی صحت داده‌ها، سرعت و پوشش." },
+];
+
+const faqs = [
+  { q: "اطلاعات مکان‌ها از کجا میاد؟", a: "ترکیبی از داده‌های عمومی، همکاری با کسب‌وکارها و گزارش کاربران — همراه با اعتبارسنجی." },
+  { q: "چطور اطلاعات رو اصلاح کنم؟", a: "در صفحه همان مکان «گزارش مشکل / پیشنهاد اصلاح» را بزنید؛ سریع بررسی می‌شود." },
+  { q: "فقط شهرهای بزرگ؟", a: "نه. پوشش به‌مرور گسترش می‌یابد و کیفیت اولویت است." },
+];
+---
+
+<BaseLayout {...({ title: `درباره ما | ${brand.name}`, description: brand.description } as any)}>
+  <main class="page">
+    <!-- HERO -->
+    <header class="hero">
+      <div class="hero__bg" aria-hidden="true"></div>
+
+      <div class="container hero__content">
+        <div class="hero__badge">
+          <span class="dot" aria-hidden="true"></span>
+          درباره {brand.name}
+        </div>
+
+        <h1 class="hero__title">{brand.tagline}</h1>
+        <p class="hero__lead">{brand.description}</p>
+
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="/">
+            رفتن به صفحه اصلی
+            <span class="btn__icon" aria-hidden="true">←</span>
+          </a>
+          <a class="btn btn--ghost" href="/contact">
+            ارتباط با ما
+            <span class="btn__icon" aria-hidden="true">✉️</span>
+          </a>
+        </div>
+
+        <div class="hero__meta" role="list">
+          {stats.map((s) => (
+            <div class="stat" role="listitem">
+              <div class="stat__value">{s.value}</div>
+              <div class="stat__label">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </header>
+
+    <!-- MISSION -->
+    <section class="section">
+      <div class="container grid2">
+        <div>
+          <h2 class="h2">ماموریت ما</h2>
+          <p class="text">
+            ماموریت {brand.name} اینه که «پیدا کردن» رو تبدیل کنه به یک تجربه‌ی سریع و
+            مطمئن؛ از جستجوی یک آدرس ساده تا کشف بهترین گزینه‌ها نزدیک شما.
+          </p>
+
+          <div class="card card--soft">
+            <h3 class="h3">قول ما به کاربر</h3>
+            <ul class="bullets">
+              <li>نتایج واضح و قابل اتکا، بدون شلوغی</li>
+              <li>سرعت بالا در جستجو و نمایش اطلاعات</li>
+              <li>به‌روزرسانی مداوم با کمک جامعه کاربران</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__header">
+            <div class="panel__title">چرا {brand.name}؟</div>
+            <div class="panel__subtitle">چند اصل ساده اما جدی</div>
+          </div>
+
+          <div class="values">
+            {values.map((v) => (
+              <article class="value">
+                <div class="value__icon" aria-hidden="true">{v.icon}</div>
+                <div class="value__body">
+                  <h3 class="value__title">{v.title}</h3>
+                  <p class="value__desc">{v.desc}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="section section--alt">
+      <div class="container">
+        <div class="section__head">
+          <h2 class="h2">داستان شکل‌گیری</h2>
+          <p class="text muted">
+            ما با یک مشکل واقعی شروع کردیم و هر روز داریم بهترش می‌کنیم.
+          </p>
+        </div>
+
+        <div class="timeline" role="list">
+          {timeline.map((t) => (
+            <div class="titem" role="listitem">
+              <div class="titem__year">{t.year}</div>
+              <div class="titem__card">
+                <div class="titem__title">{t.title}</div>
+                <div class="titem__desc">{t.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- TEAM / CULTURE -->
+    <section class="section">
+      <div class="container grid2">
+        <div>
+          <h2 class="h2">فرهنگ تیمی</h2>
+          <p class="text">
+            ما تیمی هستیم که با وسواس روی جزئیات تجربه کاربر کار می‌کنیم. برای ما کیفیت
+            یعنی سرعت، دقت و حس خوب.
+          </p>
+
+          <div class="quote">
+            <p class="quote__text">
+              «محصول خوب، راه رو کوتاه می‌کنه؛ محصول عالی، حس خوب هم اضافه می‌کنه.»
+            </p>
+            <span class="quote__by">— تیم {brand.name}</span>
+          </div>
+        </div>
+
+        <div class="card card--border">
+          <h3 class="h3">همکاری و فرصت‌ها</h3>
+          <p class="text muted">
+            اگر کسب‌وکار دارید یا می‌خواهید داده‌ها دقیق‌تر بشه، خوشحال می‌شیم همکاری کنیم.
+          </p>
+
+          <div class="actions">
+            <a class="btn btn--primary" href="/partners">
+              همکاری با {brand.name}
+              <span class="btn__icon" aria-hidden="true">↗</span>
+            </a>
+            <a class="btn btn--ghost" href="/careers">
+              فرصت‌های شغلی
+              <span class="btn__icon" aria-hidden="true">👀</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section section--alt">
+      <div class="container">
+        <div class="section__head">
+          <h2 class="h2">سوالات پرتکرار</h2>
+          <p class="text muted">اگر سوالی دارید، احتمالاً اینجا جوابش هست.</p>
+        </div>
+
+        <div class="faq">
+          {faqs.map((f) => (
+            <details class="faq__item">
+              <summary class="faq__q">{f.q}</summary>
+              <p class="faq__a">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+      <div class="container cta__inner">
+        <div class="cta__copy">
+          <h2 class="cta__title">آماده‌ای سریع‌تر پیدا کنی؟</h2>
+          <p class="cta__desc">{brand.name} برای این ساخته شده که مسیر رسیدن به جواب رو کوتاه کنه.</p>
+        </div>
+        <div class="cta__actions">
+          <a class="btn btn--primary" href="/search">
+            شروع جستجو
+            <span class="btn__icon" aria-hidden="true">🔎</span>
+          </a>
+          <a class="btn btn--ghost" href="/contact">
+            تماس با ما
+            <span class="btn__icon" aria-hidden="true">✉️</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <style>
+    :global(:root) {
+      --bg: #070b14;
+      --panel: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.14);
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.68);
+      --muted2: rgba(255, 255, 255, 0.56);
+      --accent: #7c5cff;
+      --accent2: #28d1ff;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+      --radius: 18px;
+      --radius2: 22px;
+      --max: 1120px;
+      color-scheme: dark;
+    }
+
+    .page {
+      min-height: 60dvh;
+      background: radial-gradient(1200px 700px at 75% 0%, rgba(124, 92, 255, 0.18), transparent 55%),
+        radial-gradient(900px 600px at 15% 10%, rgba(40, 209, 255, 0.14), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      padding-bottom: 28px;
+    }
+
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 56px 0 34px;
+    }
+
+    .hero__bg {
+      position: absolute;
+      inset: -2px;
+      background:
+        radial-gradient(900px 500px at 70% 10%, rgba(124, 92, 255, 0.25), transparent 55%),
+        radial-gradient(900px 550px at 15% 40%, rgba(40, 209, 255, 0.16), transparent 55%),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.05), transparent 45%);
+      pointer-events: none;
+    }
+
+    .hero__content { position: relative; }
+
+    .hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--muted);
+      font-size: 14px;
+      backdrop-filter: blur(10px);
+    }
+
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.14);
+    }
+
+    .hero__title {
+      margin: 16px 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.2;
+      letter-spacing: -0.6px;
+    }
+
+    .hero__lead {
+      margin: 0;
+      max-width: 64ch;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.9;
+    }
+
+    .hero__cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .hero__meta {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+    }
+    .stat__value { font-size: 18px; font-weight: 800; }
+    .stat__label { font-size: 13px; color: var(--muted2); margin-top: 2px; }
+
+    /* Sections */
+    .section { padding: 34px 0; }
+    .section--alt {
+      background: rgba(255, 255, 255, 0.03);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .section__head { margin-bottom: 18px; }
+    .h2 { margin: 0 0 8px; font-size: 22px; letter-spacing: -0.3px; }
+    .h3 { margin: 0 0 8px; font-size: 16px; letter-spacing: -0.2px; }
+    .text { margin: 0 0 12px; }
+    .muted { color: var(--muted); }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card {
+      border-radius: var(--radius2);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+    .card--soft { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); }
+    .card--border { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.12); }
+
+    .bullets { margin: 10px 0 0; padding: 0 18px 0 0; color: var(--muted); }
+    .bullets li { margin: 8px 0; }
+
+    .panel {
+      border-radius: var(--radius2);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+    }
+    .panel__header { padding: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.10); }
+    .panel__title { font-weight: 800; font-size: 15px; }
+    .panel__subtitle { color: var(--muted2); font-size: 13px; margin-top: 4px; }
+
+    .values { padding: 10px; display: grid; gap: 10px; }
+    .value {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 10px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+    }
+    .value__icon {
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      display: grid; place-items: center;
+      background: rgba(124, 92, 255, 0.14);
+      border: 1px solid rgba(124, 92, 255, 0.18);
+      font-size: 20px;
+    }
+    .value__title { margin: 0 0 4px; font-size: 14px; font-weight: 800; }
+    .value__desc { margin: 0; color: var(--muted); font-size: 13px; }
+
+    .timeline { display: grid; gap: 12px; }
+    .titem { display: grid; grid-template-columns: 90px 1fr; gap: 12px; }
+    .titem__year {
+      font-weight: 900;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: var(--radius);
+      display: grid; place-items: center;
+      min-height: 64px;
+    }
+    .titem__card {
+      border-radius: var(--radius2);
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .titem__title { font-weight: 900; margin-bottom: 4px; }
+    .titem__desc { color: var(--muted); font-size: 14px; }
+
+    .quote {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(40, 209, 255, 0.06);
+    }
+    .quote__text { margin: 0 0 8px; color: rgba(255, 255, 255, 0.86); }
+    .quote__by { font-size: 13px; color: var(--muted); }
+
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+
+    .faq { display: grid; gap: 10px; }
+    .faq__item {
+      padding: 14px 16px;
+      border-radius: var(--radius2);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .faq__q { cursor: pointer; font-weight: 900; list-style: none; }
+    .faq__q::-webkit-details-marker { display: none; }
+    .faq__a { margin: 10px 0 0; color: var(--muted); font-size: 14px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.92);
+      font-weight: 800;
+      font-size: 14px;
+      transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+      user-select: none;
+      text-decoration: none;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+    .btn--primary {
+      background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(40, 209, 255, 0.85));
+      border-color: rgba(255, 255, 255, 0.20);
+    }
+    .btn--ghost { background: rgba(255, 255, 255, 0.03); }
+
+    .cta { padding: 32px 0 46px; }
+    .cta__inner {
+      border-radius: 28px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: linear-gradient(135deg, rgba(124, 92, 255, 0.14), rgba(40, 209, 255, 0.08));
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+    .cta__title { margin: 0 0 6px; font-size: 20px; }
+    .cta__desc { margin: 0; color: var(--muted); }
+    .cta__actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
+    @media (max-width: 980px) {
+      .hero__meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid2 { grid-template-columns: 1fr; }
+      .titem { grid-template-columns: 70px 1fr; }
+      .cta__inner { grid-template-columns: 1fr; }
+      .cta__actions { justify-content: flex-start; }
+    }
+    @media (max-width: 520px) {
+      .titem { grid-template-columns: 1fr; }
+      .titem__year {
+        justify-self: start;
+        padding: 10px 12px;
+        width: fit-content;
+        min-height: auto;
+      }
+    }
+
+    :global(:focus-visible) {
+      outline: 2px solid rgba(40, 209, 255, 0.7);
+      outline-offset: 2px;
+      border-radius: 12px;
+    }
+  </style>
+</BaseLayout>

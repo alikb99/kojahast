@@ -1,0 +1,208 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FAQ from "../components/FAQ.astro";
+import { getCollection } from "astro:content";
+
+const allPosts = await getCollection("posts");
+
+// جدیدترین‌ها
+const latest = allPosts
+  .slice()
+  .sort((a, b) => (b.data.publishedTime ?? "").localeCompare(a.data.publishedTime ?? ""))
+  .slice(0, 10);
+
+// موبایل: category.slug = mobile-repairs
+const mobilePosts = allPosts
+  .filter((p) => p.data.category?.slug === "mobile-repairs")
+  .slice()
+  .sort((a, b) => (b.data.publishedTime ?? "").localeCompare(a.data.publishedTime ?? ""))
+  .slice(0, 6);
+
+// لپ‌تاپ/کامپیوتر: از روی لینک دسته‌بندی در سایت قدیمی به نظر میاد slug اینه:
+const laptopPosts = allPosts
+  .filter((p) => p.data.category?.slug === "laptop-and-computer-repair")
+  .slice()
+  .sort((a, b) => (b.data.publishedTime ?? "").localeCompare(a.data.publishedTime ?? ""))
+  .slice(0, 8);
+
+// FAQ عین متن صفحه اصلی قدیمی
+const faqItems = [
+  {
+    q: "هدف سایت تعمیرات کجاست چیست؟",
+    a: "بخش بزرگی از خدمات روزمره مردم، شکل آنلاین و مجازی پیدا کرده است. با این حال، هنوز هم بخش اعظم خدمات تعمیراتی به شکل آفلاین پیش می‌رود و این موضوع به خصوص در شهر های بزرگ و پر‌ترافیک چالشی واقعی است. در این وضعیت، سایت تعمیرات کجاست قصد دارد تا با معرفی برترین ارائه‌دهندگان خدمات و سایت‌های تعمیراتی، فرایند بررسی، انتخاب و دسترسی به این خدمات را تسهیل کند.",
+  },
+  {
+    q: "هزینه تبلیغات در این سایت چقدر است؟",
+    a: "پیام خود را از طریق تلگرام برای ما ارسال نمایید. حوزه کاری خودتان و صفحه‌ی مد نظرتان برای تبلیغات را مشخص کنید. واحد پشتیبانی در اولین فرصت پاسخگوی شما خواهد بود. علاوه بر این، اگر با سایت تریبون آشنایی داشته باشید، از طریق تریبون نیز می‌توانید اقدام کنید.",
+  },
+  {
+    q: "من یک مرکز یا سایت تعمیراتی خوب می‌شناسم، چطور آن را به شما معرفی کنم؟",
+    a: "فرض کنید که از خدمات یک مرکز سرویس لباسشویی راضی بودید. به مقاله لیست مراکز تعمیر لباسشویی بروید و در قالب یک کامنت، در مورد تجربه خودتان و مزایا و خدمات این مرکز بنویسید. ما به طور ماهانه مراکز را بررسی می‌کنیم و در صورت امکان مرکز مذکور را به لیست اضافه خواهیم کرد.",
+  },
+];
+
+const seo = {
+  title: "کجا هست | معرفی مراکز خدمات و تعمیرات",
+  description:
+    "کجا هست: معرفی بهترین مراکز خدمات و تعمیرات در دسته‌بندی‌های مختلف + آدرس و تلفن.",
+  canonical: "https://kojahast.com/",
+  robots: "index,follow,max-snippet:-1,max-video-preview:-1,max-image-preview:large",
+  og: {
+    type: "website",
+    title: "کجا هست | معرفی مراکز خدمات و تعمیرات",
+    description:
+      "معرفی بهترین مراکز خدمات و تعمیرات در دسته‌بندی‌های مختلف + آدرس و تلفن.",
+    siteName: "کجا هست",
+    locale: "fa_IR",
+    url: "https://kojahast.com/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "کجا هست | معرفی مراکز خدمات و تعمیرات",
+    description:
+      "معرفی بهترین مراکز خدمات و تعمیرات در دسته‌بندی‌های مختلف + آدرس و تلفن.",
+  },
+  jsonLd: [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "کجا هست",
+      url: "https://kojahast.com",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((x) => ({
+        "@type": "Question",
+        name: x.q,
+        acceptedAnswer: { "@type": "Answer", text: x.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout seo={seo}>
+  <main class="mx-auto max-w-6xl px-4 py-10">
+    {/* هدر/هرو */}
+    <header class="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
+      <p class="text-sm text-zinc-600">کجا هست</p>
+      <h1 class="mt-2 text-2xl font-black leading-10">
+        بهترین مراکز تعمیرات کجاست؟
+      </h1>
+      <p class="mt-3 max-w-3xl leading-8 text-zinc-700">
+        مرجع معرفی مراکز و نمایندگی‌های خدمات و تعمیرات (با آدرس، تلفن و توضیحات کامل).
+      </p>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a class="rounded-xl bg-zinc-900 px-4 py-2 text-white" href="/blog/">
+          رفتن به مقالات
+        </a>
+        <a class="rounded-xl border border-zinc-300 px-4 py-2" href="/contact/">
+          تماس با ما
+        </a>
+      </div>
+    </header>
+
+    {/* جدیدترین جاها */}
+    <section class="mt-10">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold">جدیدترین جاها</h2>
+        <a class="text-sm text-zinc-700 underline" href="/blog/">
+          همه مقالات
+        </a>
+      </div>
+
+      <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {latest.map((p) => (
+          <li class="rounded-2xl border border-zinc-200 p-4 hover:bg-zinc-50">
+            <div class="mb-2">
+              <a
+                class="inline-flex items-center rounded-full border border-zinc-200 px-3 py-1 text-xs text-zinc-700"
+                href={`/blog/category/${p.data.category.slug}/`}
+              >
+                {p.data.category.name}
+              </a>
+            </div>
+            <a class="block font-bold leading-8" href={`/blog/${p.slug}/`}>
+              {p.data.title}
+            </a>
+            {p.data.description ? (
+              <p class="mt-2 line-clamp-2 text-sm leading-7 text-zinc-700">
+                {p.data.description}
+              </p>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    {/* مراکز تعمیر موبایل */}
+    <section class="mt-12">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold">مراکز تعمیر موبایل</h2>
+        <a
+          class="text-sm text-zinc-700 underline"
+          href="/blog/category/mobile-repairs/"
+        >
+          مشاهده دسته موبایل
+        </a>
+      </div>
+
+      <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {mobilePosts.map((p) => (
+          <li class="rounded-2xl border border-zinc-200 p-4 hover:bg-zinc-50">
+            <a class="block font-bold leading-8" href={`/blog/${p.slug}/`}>
+              {p.data.title}
+            </a>
+            <p class="mt-2 line-clamp-2 text-sm leading-7 text-zinc-700">
+              {p.data.description}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    {/* مراکز تعمیر لپ تاپ */}
+    <section class="mt-12">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold">مراکز تعمیر لپ تاپ</h2>
+        <a
+          class="text-sm text-zinc-700 underline"
+          href="/blog/category/laptop-and-computer-repair/"
+        >
+          مشاهده دسته لپ‌تاپ و کامپیوتر
+        </a>
+      </div>
+
+      <ul class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {laptopPosts.map((p) => (
+          <li class="overflow-hidden rounded-2xl border border-zinc-200 hover:bg-zinc-50">
+            {p.data.og?.image ? (
+              <a href={`/blog/${p.slug}/`}>
+                <img
+                  src={p.data.og.image}
+                  alt={p.data.og.imageAlt ?? p.data.title}
+                  loading="lazy"
+                  class="h-44 w-full object-cover"
+                />
+              </a>
+            ) : null}
+
+            <div class="p-4">
+              <a class="block font-bold leading-8" href={`/blog/${p.slug}/`}>
+                {p.data.title}
+              </a>
+              <p class="mt-2 line-clamp-2 text-sm leading-7 text-zinc-700">
+                {p.data.description}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    {/* FAQ */}
+    <FAQ items={faqItems} />
+  </main>
+</BaseLayout>

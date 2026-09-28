@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts");
+const sorted = posts
+  .slice()
+  .sort((a, b) => (b.data.publishedTime ?? "").localeCompare(a.data.publishedTime ?? ""));
+
+const seo = {
+  title: "مقالات | کجا هست",
+  description: "آخرین مقالات معرفی مراکز خدمات و تعمیرات.",
+  canonical: "https://kojahast.com/blog/",
+  og: { type: "website" },
+  twitter: {},
+  jsonLd: [],
+};
+---
+
+<BaseLayout seo={seo}>
+  <main>
+    <h1>مقالات</h1>
+
+    <ul>
+      {sorted.map((p) => (
+        <li>
+          <a href={`/blog/${p.slug}/`}>{p.data.title}</a>
+        </li>
+      ))}
+    </ul>
+  </main>
+</BaseLayout>

@@ -1,0 +1,83 @@
+---
+type JsonLd = Record<string, any> | any;
+
+type Props = {
+  title: string;
+  description: string;
+  canonical: string;
+  robots?: string;
+
+  og?: {
+    type?: string;
+    title?: string;
+    description?: string;
+    image?: string;
+    imageAlt?: string;
+    locale?: string;
+    siteName?: string;
+    updatedTime?: string;
+    section?: string;
+    url?: string;
+  };
+
+  twitter?: {
+    card?: string;
+    title?: string;
+    description?: string;
+    image?: string;
+  };
+
+  jsonLd?: JsonLd[]; // چندین اسکیما
+};
+
+const {
+  title,
+  description,
+  canonical,
+  robots = "index,follow,max-snippet:-1,max-video-preview:-1,max-image-preview:large",
+  og = {},
+  twitter = {},
+  jsonLd = [],
+} = Astro.props;
+
+const ogTitle = og.title ?? title;
+const ogDesc = og.description ?? description;
+const ogUrl = og.url ?? canonical;
+
+const twTitle = twitter.title ?? title;
+const twDesc = twitter.description ?? description;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={robots} />
+<link rel="canonical" href={canonical} />
+
+{/* OpenGraph */}
+<meta property="og:locale" content={og.locale ?? "fa_IR"} />
+<meta property="og:type" content={og.type ?? "article"} />
+<meta property="og:title" content={ogTitle} />
+<meta property="og:description" content={ogDesc} />
+<meta property="og:url" content={ogUrl} />
+<meta property="og:site_name" content={og.siteName ?? "کجا هست"} />
+{og.section ? <meta property="article:section" content={og.section} /> : null}
+{og.updatedTime ? <meta property="og:updated_time" content={og.updatedTime} /> : null}
+
+{og.image ? (
+  <>
+    <meta property="og:image" content={og.image} />
+    <meta property="og:image:secure_url" content={og.image} />
+    {og.imageAlt ? <meta property="og:image:alt" content={og.imageAlt} /> : null}
+  </>
+) : null}
+
+{/* Twitter */}
+<meta name="twitter:card" content={twitter.card ?? "summary_large_image"} />
+<meta name="twitter:title" content={twTitle} />
+<meta name="twitter:description" content={twDesc} />
+{twitter.image ? <meta name="twitter:image" content={twitter.image} /> : null}
+
+{/* JSON-LD */}
+{jsonLd.map((obj) => (
+  <script type="application/ld+json" set:html={JSON.stringify(obj)} />
+))}

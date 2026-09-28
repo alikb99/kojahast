@@ -1,0 +1,26 @@
+---
+import "../styles/global.css";
+import SEO from "../components/SEO.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+type Props = {
+  seo: Parameters<typeof SEO>[0];
+};
+
+const { seo } = Astro.props;
+---
+
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO {...seo} />
+  </head>
+  <body class="bg-white text-zinc-900">
+    <Header />
+    <slot />
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,91 @@
+---
+type Props = {
+  id: string;            // anchor id مثل "mobileman"
+  name: string;
+  address: string;
+  phone?: string;
+  hours?: string;
+  website?: string;
+  nofollowwebsite?: string;
+  instagram?: string;
+
+  // برای نقشه/مسیریابی بهتره lat/lng داشته باشی
+  lat?: number;
+  lng?: number;
+};
+
+const {
+  id, name, address, phone, hours, website, nofollowwebsite, instagram, lat, lng
+} = Astro.props;
+
+// لینک‌های مسیریابی:
+// بلد: /directions/driving?origin=lng,lat&destination=lng,lat  (origin اختیاریه؛ اگر نباشه بلد از موقعیت کاربر استفاده می‌کنه)
+// نمونه URL پارامترها در خود دامنه بلد دیده میشه. :contentReference[oaicite:0]{index=0}
+//
+// نشان: طبق نمونه‌های عمومی، لینک کوتاه nshn.ir/maps با origin/destination کار می‌کنه. :contentReference[oaicite:1]{index=1}
+
+const dest = (lat && lng) ? `${lat},${lng}` : "";
+const googleQuery = encodeURIComponent(lat && lng ? `${lat},${lng}` : address);
+
+const googleMapsOpen = `https://www.google.com/maps/search/?api=1&query=${googleQuery}`;
+const googleMapsEmbed = `https://www.google.com/maps?q=${googleQuery}&z=15&output=embed`;
+
+const baladDirections = (lat && lng)
+  ? `https://balad.ir/directions/driving?destination=${encodeURIComponent(`${lng},${lat}`)}`
+  : `https://balad.ir/`; // اگر مختصات نداری، حداقل صفحه بلد
+
+const neshanDirections = (lat && lng)
+  ? `https://nshn.ir/maps?destination=${encodeURIComponent(`${lat},${lng}`)}&type=drive`
+  : `https://neshan.org/maps`; // fallback
+---
+
+<section id={id} class="mt-10 scroll-mt-24">
+  <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+    <div class="flex flex-col gap-2">
+      <h2 class="text-lg font-black leading-9">{name}</h2>
+
+      <div class="text-sm leading-7 text-zinc-700">
+        <p><span class="font-bold">آدرس:</span> {address}</p>
+        {phone ? <p class="mt-1"><span class="font-bold">تماس:</span> {phone}</p> : null}
+        {hours ? <p class="mt-1"><span class="font-bold">ساعت کاری:</span> {hours}</p> : null}
+        {website ? <p class="mt-1"><span class="font-bold">وبسایت:</span> <a class="underline" href={website} target="_blank" rel="noopener noreferrer">{website}</a></p> : null}
+        {nofollowwebsite ? <p class="mt-1"><span class="font-bold">وبسایت:</span> <a class="underline" href={nofollowwebsite} target="_blank" rel="noopener nofollow noreferrer">{nofollowwebsite}</a></p> : null}
+        {instagram ? <p class="mt-1"><span class="font-bold">اینستاگرام:</span> <span dir="ltr">{instagram}</span></p> : null}
+      </div>
+
+      {/* دکمه‌ها */}
+      <div class="mt-4 flex flex-wrap gap-2">
+        <a class="rounded-xl bg-zinc-900 px-4 py-2 text-sm text-white" href={googleMapsOpen} target="_blank" rel="nofollow noopener noreferrer">
+          نمایش در گوگل‌مپ
+        </a>
+
+        <a class="rounded-xl border border-zinc-300 px-4 py-2 text-sm" href={neshanDirections} target="_blank" rel="nofollow noopener noreferrer">
+          مسیر‌یابی با نشان
+        </a>
+
+        <a class="rounded-xl border border-zinc-300 px-4 py-2 text-sm" href={baladDirections} target="_blank" rel="nofollow noopener noreferrer ">
+          مسیر‌یابی با بلد
+        </a>
+      </div>
+
+      {/* نقشه (Lazy) */}
+      <details class="mt-4 rounded-xl border border-zinc-200 p-3">
+        <summary class="cursor-pointer text-sm font-bold">نمایش نقشه</summary>
+        <div class="mt-3 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50">
+          <iframe
+            title={`نقشه ${name}`}
+            src={googleMapsEmbed}
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            class="h-72 w-full"
+          />
+        </div>
+      </details>
+
+      {/* متن توضیحی مرکز */}
+      <div class="mt-4 leading-8 text-zinc-800">
+        <slot />
+      </div>
+    </div>
+  </div>
+</section>
