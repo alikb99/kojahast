@@ -124,7 +124,7 @@ export function articleGraph(post: Post, url: string, crumbs: Crumb[], wordCount
         ...(c.lat && c.lng ? { geo: { "@type": "GeoCoordinates", latitude: c.lat, longitude: c.lng } } : {}),
         ...(() => {
           const same = [
-            c.website,
+            SITE.showWebsites ? c.website : undefined,
             c.instagram ? instagramUrl(c.instagram) : undefined,
             c.telegram ? telegramUrl(c.telegram) : undefined,
           ].filter(Boolean);

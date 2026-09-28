@@ -15,7 +15,12 @@ export const SITE = {
   email: "support@kojahast.ir",
   address: "تهران، خیابان مطهری، خیابان قائم‌مقام فراهانی، پلاک ۱۵۸",
   hours: "شنبه تا پنجشنبه، ۹ تا ۱۸",
-  defaultImage: "/images/best-mobile-phone-repairs-in-tehran.webp",
+  /**
+   * نمایش آدرس وب‌سایت مراکز (کارت، اسکیما و لینک‌های خارجی متن).
+   * به درخواست مدیر سایت خاموش است؛ داده‌ها در frontmatter محفوظ می‌مانند.
+   */
+  showWebsites: false,
+  defaultImage:"/images/best-mobile-phone-repairs-in-tehran.webp",
   logo: "/images/logo.png",
   /** شبکه‌های اجتماعی رسمی — فقط موارد واقعی را پر کنید؛ خالی‌ها نمایش داده نمی‌شوند */
   socials: {

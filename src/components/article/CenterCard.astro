@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import { SITE } from "../../data/site";
 import type { Post } from "../../lib/posts";
 import {
   fa, inlineMd, phoneDisplay, telHref, instagramUrl, telegramUrl, whatsappUrl, hostOf,
@@ -10,88 +11,132 @@ type Props = { c: Center; n: number };
 const { c, n } = Astro.props;
 
 const hasGeo = typeof c.lat === "number" && typeof c.lng === "number";
-const q = encodeURIComponent(hasGeo ? `${c.lat},${c.lng}` : `${c.name} ${c.address}`);
-const googleMaps = `https://www.google.com/maps/search/?api=1&query=${q}`;
+
+// نقشه جاسازی‌شده گوگل (بدون نیاز به کلید API)؛ با مختصات دقیق‌تر است و بدون آن با نام و آدرس جستجو می‌شود
+const mapQuery = encodeURIComponent(hasGeo ? `${c.lat},${c.lng}` : `${c.name}، ${c.address}`);
+const mapEmbed = `https://maps.google.com/maps?q=${mapQuery}&hl=fa&z=16&output=embed`;
 // مسیریابی داخلی فقط وقتی مختصات داریم (بدون مختصات، لینک بی‌فایده نمی‌سازیم)
 const neshan = hasGeo ? `https://nshn.ir/maps?destination=${c.lat},${c.lng}&type=drive` : null;
 const balad = hasGeo ? `https://balad.ir/directions/driving?destination=${c.lng},${c.lat}` : null;
 const ext = { target: "_blank", rel: "nofollow noopener noreferrer" };
+
+const website = SITE.showWebsites ? c.website : undefined;
+const hasSocial = Boolean(c.instagram || c.telegram || c.whatsapp || website);
 ---
 
-<section class="center" id={c.id} aria-labelledby={`${c.id}-title`}>
-  <header class="center__head">
-    <span class="center__n" aria-hidden="true">{fa(n)}</span>
+<section class="cc" id={c.id} aria-labelledby={`${c.id}-title`}>
+  <header class="cc__head">
+    <span class="cc__n" aria-hidden="true">{fa(n)}</span>
     <div>
       <h3 id={`${c.id}-title`}>{c.name}</h3>
-      <div class="center__tags">
+      <div class="cc__tags">
         {c.area && <span class="chip chip--gray"><Icon name="lucide:map-pin" />{c.area}</span>}
         {c.bestFor && <span class="chip"><Icon name="lucide:sparkles" />{c.bestFor}</span>}
       </div>
     </div>
   </header>
 
-  <div class="center__body">
-    <div class="center__text prose">
+  <div class="cc__body">
+    <div class="cc__text prose">
       {c.summary.map((p) => <p set:html={inlineMd(p)} />)}
     </div>
 
     {c.services.length > 0 && (
-      <div class="center__services">
+      <div class="cc__services">
         <h4>خدمات اصلی</h4>
         <ul>
-          {c.services.map((s) => <li><Icon name="lucide:check" /><span set:html={inlineMd(s)} /></li>)}
+          {c.services.map((s) => (
+            <li><Icon name="lucide:check" /><span set:html={inlineMd(s)} /></li>
+          ))}
         </ul>
       </div>
     )}
 
-    <div class="center__pc">
-      <div class="center__pros">
+    <div class="cc__pc">
+      <div class="cc__box cc__box--pros">
         <h4><Icon name="lucide:thumbs-up" />نقاط قوت</h4>
-        <ul>{c.pros.map((s) => <li set:html={inlineMd(s)} />)}</ul>
+        <ul>
+          {c.pros.map((s) => (
+            <li><span class="cc__mark" aria-hidden="true">+</span><span set:html={inlineMd(s)} /></li>
+          ))}
+        </ul>
       </div>
-      <div class="center__cons">
+      <div class="cc__box cc__box--cons">
         <h4><Icon name="lucide:thumbs-down" />نقاط ضعف</h4>
-        <ul>{c.cons.map((s) => <li set:html={inlineMd(s)} />)}</ul>
+        <ul>
+          {c.cons.map((s) => (
+            <li><span class="cc__mark" aria-hidden="true">−</span><span set:html={inlineMd(s)} /></li>
+          ))}
+        </ul>
       </div>
     </div>
 
-    <dl class="center__info">
-      <div>
-        <dt><Icon name="lucide:map-pin" />آدرس</dt>
+    <div class="cc__loc">
+    <dl class="cc__info">
+      <div class="cc__row">
+        <dt><span class="cc__ico"><Icon name="lucide:map-pin" /></span>آدرس</dt>
         <dd>{c.address}</dd>
       </div>
+
       {c.phones.length > 0 && (
-        <div>
-          <dt><Icon name="lucide:phone" />تلفن</dt>
-          <dd class="center__phones">
-            {c.phones.map((p) => <a href={telHref(p)} class="ltr">{phoneDisplay(p)}</a>)}
+        <div class="cc__row">
+          <dt><span class="cc__ico"><Icon name="lucide:phone" /></span>تلفن</dt>
+          <dd class="cc__pills">
+            {c.phones.map((p) => (
+              <a class="cc__pill cc__pill--phone" href={telHref(p)}><span class="ltr">{phoneDisplay(p)}</span></a>
+            ))}
           </dd>
         </div>
       )}
-      {c.hours && (
-        <div>
-          <dt><Icon name="lucide:clock" />ساعت کاری</dt>
-          <dd>{c.hours}</dd>
-        </div>
-      )}
-      {(c.instagram || c.telegram || c.whatsapp || c.website) && (
-        <div>
-          <dt><Icon name="lucide:globe" />شبکه‌ها و سایت</dt>
-          <dd class="center__social">
-            {c.instagram && <a href={instagramUrl(c.instagram)} {...ext} class="ltr"><Icon name="simple-icons:instagram" />{c.instagram.replace(/^@/, "")}</a>}
-            {c.telegram && <a href={telegramUrl(c.telegram)} {...ext} class="ltr"><Icon name="simple-icons:telegram" />{c.telegram.replace(/^@/, "")}</a>}
-            {c.whatsapp && <a href={whatsappUrl(c.whatsapp)} {...ext} class="ltr"><Icon name="simple-icons:whatsapp" />واتس‌اپ</a>}
-            {c.website && <a href={c.website} {...ext} class="ltr"><Icon name="lucide:globe" />{hostOf(c.website)}</a>}
+
+      <div class="cc__row">
+        <dt><span class="cc__ico"><Icon name="lucide:clock" /></span>ساعت کاری</dt>
+        <dd>{c.hours ?? "اعلام نشده؛ قبل از مراجعه تماس بگیرید"}</dd>
+      </div>
+
+      {hasSocial && (
+        <div class="cc__row">
+          <dt><span class="cc__ico"><Icon name="lucide:message-circle" /></span>شبکه‌های اجتماعی</dt>
+          <dd class="cc__pills">
+            {c.instagram && (
+              <a class="cc__pill" href={instagramUrl(c.instagram)} {...ext}>
+                <Icon name="simple-icons:instagram" /><span class="ltr">{c.instagram.replace(/^@/, "")}</span>
+              </a>
+            )}
+            {c.telegram && (
+              <a class="cc__pill" href={telegramUrl(c.telegram)} {...ext}>
+                <Icon name="simple-icons:telegram" /><span class="ltr">{c.telegram.replace(/^@/, "")}</span>
+              </a>
+            )}
+            {c.whatsapp && (
+              <a class="cc__pill" href={whatsappUrl(c.whatsapp)} {...ext}>
+                <Icon name="simple-icons:whatsapp" /><span>واتس‌اپ</span>
+              </a>
+            )}
+            {website && (
+              <a class="cc__pill" href={website} {...ext}>
+                <Icon name="lucide:globe" /><span class="ltr">{hostOf(website)}</span>
+              </a>
+            )}
           </dd>
         </div>
       )}
     </dl>
+    <div class="cc__map">
+      <iframe
+        src={mapEmbed}
+        title={`نقشه موقعیت ${c.name}`}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+      ></iframe>
+    </div>
+    </div>
 
-    <div class="center__actions">
+    <div class="cc__actions">
       {c.phones.length > 0 && (
         <a class="btn btn--brand btn--sm" href={telHref(c.phones[0])}><Icon name="lucide:phone" />تماس</a>
       )}
-      <a class="btn btn--ghost btn--sm" href={googleMaps} {...ext}><Icon name="lucide:map" />گوگل‌مپ</a>
       {neshan && <a class="btn btn--ghost btn--sm" href={neshan} {...ext}><Icon name="lucide:navigation" />مسیریابی نشان</a>}
       {balad && <a class="btn btn--ghost btn--sm" href={balad} {...ext}><Icon name="lucide:navigation" />مسیریابی بلد</a>}
     </div>
@@ -99,47 +144,72 @@ const ext = { target: "_blank", rel: "nofollow noopener noreferrer" };
 </section>
 
 <style>
-  .center {
+  .cc {
     background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm);
-    scroll-margin-top: calc(var(--header-h) + 16px); overflow: hidden;
+    scroll-margin-top: calc(var(--header-h) + 16px); overflow: hidden; text-align: right;
   }
-  .center:target { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-100); }
-  .center__head { display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-bottom: 1px solid var(--line-2); background: linear-gradient(to left, var(--bg-softer), #fff); }
-  .center__n {
+  .cc:target { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-100); }
+  .cc__head { display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-bottom: 1px solid var(--line-2); background: linear-gradient(to left, var(--bg-softer), #fff); }
+  .cc__n {
     flex: none; width: 40px; height: 40px; border-radius: 12px; background: var(--brand-600); color: #fff;
     display: grid; place-items: center; font-weight: 900; font-size: 1.05rem;
   }
-  .center__head h3 { font-size: 1.15rem; line-height: 1.7; }
-  .center__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-  .center__body { padding: 18px 20px 20px; display: grid; gap: 18px; }
-  .center__text { font-size: .98rem; }
-  .center h4 { font-size: .92rem; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
-  .center h4 svg { width: 17px; height: 17px; }
-  .center ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: .9rem; line-height: 1.9; }
-  .center__services ul { grid-template-columns: 1fr; }
-  @media (min-width: 640px) { .center__services ul { grid-template-columns: 1fr 1fr; column-gap: 20px; } }
-  .center__services li { display: flex; gap: 6px; align-items: flex-start; }
-  .center__services li svg { width: 16px; height: 16px; color: var(--brand-600); flex: none; margin-top: 6px; }
-  .center__pc { display: grid; gap: 12px; }
-  @media (min-width: 640px) { .center__pc { grid-template-columns: 1fr 1fr; } }
-  .center__pros, .center__cons { border-radius: var(--radius-sm); padding: 12px 14px; }
-  .center__pros { background: var(--brand-50); border: 1px solid var(--brand-100); }
-  .center__pros h4 { color: var(--brand-700); }
-  .center__cons { background: var(--danger-50); border: 1px solid #f6d3cb; }
-  .center__cons h4 { color: var(--danger); }
-  .center__pros li, .center__cons li { position: relative; padding-right: 16px; }
-  .center__pros li::before, .center__cons li::before { position: absolute; right: 0; font-weight: 900; }
-  .center__pros li::before { content: "+"; color: var(--brand-700); }
-  .center__cons li::before { content: "−"; color: var(--danger); }
-  .center__info { margin: 0; display: grid; gap: 10px; background: var(--bg-softer); border: 1px dashed var(--line); border-radius: var(--radius-sm); padding: 14px; font-size: .9rem; }
-  @media (min-width: 720px) { .center__info { grid-template-columns: 1fr 1fr; } .center__info > div:first-child { grid-column: 1 / -1; } }
-  .center__info dt { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: .78rem; font-weight: 700; }
-  .center__info dt svg { width: 15px; height: 15px; color: var(--brand); }
-  .center__info dd { margin: 2px 0 0; color: var(--ink); line-height: 1.9; }
-  .center__phones, .center__social { display: flex; flex-wrap: wrap; gap: 4px 14px; }
-  .center__phones a { font-weight: 800; color: var(--brand-700); }
-  .center__social a { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-2); font-size: .85rem; }
-  .center__social a:hover, .center__phones a:hover { text-decoration: underline; }
-  .center__social svg { width: 14px; height: 14px; }
-  .center__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cc__head h3 { font-size: 1.15rem; line-height: 1.7; }
+  .cc__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .cc__body { padding: 18px 20px 20px; display: grid; gap: 18px; }
+  .cc__text { font-size: .98rem; }
+  .cc h4 { font-size: .92rem; display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+  .cc h4 :global(svg) { width: 17px; height: 17px; }
+  .cc ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: .9rem; line-height: 1.9; }
+
+  /* خدمات */
+  .cc__services ul { grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .cc__services ul { grid-template-columns: 1fr 1fr; column-gap: 20px; } }
+  .cc__services li { display: flex; gap: 8px; align-items: flex-start; }
+  .cc__services li :global(svg) { width: 16px; height: 16px; color: var(--brand-600); flex: none; margin-top: 6px; }
+
+  /* نقاط قوت و ضعف: علامت سمت راست و متن چسبیده به آن */
+  .cc__pc { display: grid; gap: 12px; }
+  @media (min-width: 640px) { .cc__pc { grid-template-columns: 1fr 1fr; } }
+  .cc__box { border-radius: var(--radius-sm); padding: 14px 16px; }
+  .cc__box li { display: flex; align-items: flex-start; gap: 8px; justify-content: flex-start; }
+  .cc__mark {
+    flex: none; width: 20px; height: 20px; margin-top: 4px; border-radius: 50%; display: grid; place-items: center;
+    font-weight: 900; font-size: .9rem; line-height: 1;
+  }
+  .cc__box--pros { background: var(--brand-50); border: 1px solid var(--brand-100); }
+  .cc__box--pros h4 { color: var(--brand-700); }
+  .cc__box--pros .cc__mark { background: var(--brand-600); color: #fff; }
+  .cc__box--cons { background: var(--danger-50); border: 1px solid #f6d3cb; }
+  .cc__box--cons h4 { color: var(--danger); }
+  .cc__box--cons .cc__mark { background: var(--danger); color: #fff; }
+
+  /* اطلاعات تماس: ردیف‌های منظم برچسب/مقدار */
+  .cc__loc { border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; background: #fff; }
+  .cc__info { margin: 0; font-size: .9rem; }
+  .cc__map { position: relative; height: 280px; border-top: 1px solid var(--line); background: var(--bg-soft); }
+  .cc__map::before {
+    content: "در حال بارگذاری نقشه…"; position: absolute; inset: 0; display: grid; place-items: center;
+    color: var(--muted); font-size: .85rem;
+  }
+  .cc__map iframe { position: relative; width: 100%; height: 100%; border: 0; display: block; }
+  @media (min-width: 1024px) { .cc__map { height: 320px; } }
+  .cc__row { display: grid; grid-template-columns: 1fr; gap: 6px; padding: 12px 16px; background: #fff; }
+  .cc__row:nth-child(even) { background: var(--bg-softer); }
+  .cc__row + .cc__row { border-top: 1px solid var(--line-2); }
+  @media (min-width: 640px) { .cc__row { grid-template-columns: 170px 1fr; align-items: center; gap: 16px; } }
+  .cc__info dt { display: flex; align-items: center; gap: 8px; color: var(--ink-2); font-weight: 700; font-size: .85rem; }
+  .cc__ico { width: 28px; height: 28px; border-radius: 8px; background: var(--brand-50); color: var(--brand-600); display: grid; place-items: center; flex: none; }
+  .cc__ico :global(svg) { width: 15px; height: 15px; }
+  .cc__info dd { margin: 0; color: var(--ink); line-height: 1.9; }
+  .cc__pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cc__pill {
+    display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px; border-radius: 999px;
+    border: 1px solid var(--line); background: #fff; font-size: .85rem; color: var(--ink-2); transition: border-color .15s, color .15s;
+  }
+  .cc__pill:hover { border-color: var(--brand); color: var(--brand-700); }
+  .cc__pill :global(svg) { width: 14px; height: 14px; }
+  .cc__pill--phone { font-weight: 800; color: var(--brand-700); border-color: var(--brand-100); background: var(--brand-50); }
+
+  .cc__actions { display: flex; flex-wrap: wrap; gap: 8px; }
 </style>

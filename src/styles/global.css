@@ -251,7 +251,7 @@ p { margin: 0; }
 /* ───────── Utilities ───────── */
 .muted { color: var(--muted); }
 .visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.center { text-align: center; }
+.u-center { text-align: center; }
 .mt-lg { margin-top: 32px; }
 
 @media (max-width: 1023px) {
