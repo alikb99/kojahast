@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { getPosts, categoryOf } from "../lib/posts";
 import { fa, postUrl } from "../lib/utils";
 
-/** ایندکس جستجوی سمت کاربر: مقالات + نام و منطقه تک‌تک مراکز */
+/** ایندکس جستجوی سمت کاربر: مقالات + نام و منطقه تک تک مراکز */
 export const GET: APIRoute = async () => {
   const posts = await getPosts();
   const items = posts.flatMap((p) => {

@@ -1,5 +1,5 @@
 // اعتبارسنجی سریع یک یا چند مقاله: node scripts/check-post.mjs src/content/posts/x.md ...
-// ساختار frontmatter، تعداد مراکز، حجم کلمات و لینک‌های داخلی را بررسی می‌کند.
+// ساختار frontmatter، تعداد مراکز، حجم کلمات و لینک های داخلی را بررسی می کند.
 import fs from "node:fs";
 import path from "node:path";
 import yaml from "js-yaml";
@@ -45,6 +45,9 @@ for (const file of files) {
     continue;
   }
   const body = m[2];
+  // قاعده سایت: نیم فاصله ممنوع است؛ همه جا فاصله معمولی (docs/content-guidelines.md)
+  const zw = (raw.match(/\u200c/g) || []).length;
+  if (zw) errors.push(`${zw} half-space (ZWNJ U+200C) found — use a normal space`);
   const req = ["title", "description", "category", "keyword", "image", "imageAlt", "publishedTime", "modifiedTime", "lead", "centers"];
   req.forEach((k) => !fm[k] && errors.push(`missing ${k}`));
   if (!["mobile-repairs", "laptop-and-computer-repair"].includes(fm.category)) errors.push(`bad category ${fm.category}`);
@@ -75,9 +78,9 @@ for (const file of files) {
   if (wc < 700) errors.push(`word count ${wc} < 700`);
 
   // کلاستر کلمات کلیدی و LSI (docs/keyword-briefs.md)
-  // مقایسه بدون حساسیت به نیم‌فاصله/فاصله و ی/ك عربی
-  const norm = (s) => String(s).replace(/[‌\s]+/g, " ").replace(/ي/g, "ی").replace(/ك/g, "ک").toLowerCase();
-  // نام، منطقه و «مناسب برای» مراکز هم روی صفحه دیده می‌شوند
+  // مقایسه بدون حساسیت به نیم فاصله/فاصله و ی/ك عربی
+  const norm = (s) => String(s).replace(/[\u200c\s]+/g, " ").replace(/ي/g, "ی").replace(/ك/g, "ک").toLowerCase();
+  // نام، منطقه و «مناسب برای» مراکز هم روی صفحه دیده می شوند
   const visible = centers.flatMap((c) => [c.name, c.area, c.bestFor]);
   const textN = norm([fm.title, fm.h1, fm.description, allText, ...visible].join(" "));
   const kw = fm.keywords || [];

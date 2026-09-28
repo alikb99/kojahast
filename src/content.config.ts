@@ -3,7 +3,7 @@ import { glob } from "astro/loaders";
 
 /**
  * هر مقاله = یک فایل .md در src/content/posts
- * اطلاعات مراکز به‌صورت ساختاریافته در frontmatter نگهداری می‌شود تا
+ * اطلاعات مراکز به صورت ساختاریافته در frontmatter نگهداری می شود تا
  * جدول معرفی، کارت مراکز، فهرست مطالب و اسکیمای LocalBusiness خودکار ساخته شوند.
  * راهنمای کامل: docs/content-guidelines.md
  */
@@ -22,7 +22,7 @@ const center = z.object({
   lat: z.number().optional(),
   lng: z.number().optional(),
   bestFor: z.string().optional(), // مناسب برای ... (یک عبارت کوتاه)
-  summary: z.array(z.string()).min(1), // پاراگراف‌های توضیح مرکز
+  summary: z.array(z.string()).min(1), // پاراگراف های توضیح مرکز
   services: z.array(z.string()).default([]),
   pros: z.array(z.string()).min(1),
   cons: z.array(z.string()).min(1),
@@ -39,13 +39,13 @@ const posts = defineCollection({
     brand: z.string().optional(),
     city: z.string().default("تهران"),
     keyword: z.string(), // کلمه کلیدی اصلی
-    keywords: z.array(z.string()).default([]), // کلاستر کلمات کلیدی: کلمات فرعی و سؤال‌محور (docs/keyword-briefs.md)
+    keywords: z.array(z.string()).default([]), // کلاستر کلمات کلیدی: کلمات فرعی و سؤال محور (docs/keyword-briefs.md)
     lsi: z.array(z.string()).default([]), // کلمات LSI که باید در متن بیایند
     image: z.string(),
     imageAlt: z.string(),
     publishedTime: z.string(),
     modifiedTime: z.string(),
-    lead: z.string(), // مقدمه کوتاه بالای جدول (لینک مارک‌داون مجاز)
+    lead: z.string(), // مقدمه کوتاه بالای جدول (لینک مارک داون مجاز)
     centers: z.array(center).min(5).max(20),
     faq: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
     related: z.array(z.string()).default([]), // slug مقالات مرتبط

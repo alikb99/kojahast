@@ -1,6 +1,6 @@
-// ساخت فاوآیکون و لوگو از فایل‌های منبع در assets/brand/
+// ساخت فاوآیکون و لوگو از فایل های منبع در assets/brand/
 // اجرا: node scripts/build-icons.mjs
-// ورودی: assets/brand/icon.webp (نماد ذره‌بین) و assets/brand/logo.webp (لوگوی کامل با نوشته)
+// ورودی: assets/brand/icon.webp (نماد ذره بین) و assets/brand/logo.webp (لوگوی کامل با نوشته)
 import sharp from "sharp";
 import fs from "node:fs";
 
@@ -9,7 +9,7 @@ const SRC_LOGO = "assets/brand/logo.webp";
 const clear = { r: 0, g: 0, b: 0, alpha: 0 };
 const white = { r: 255, g: 255, b: 255, alpha: 1 };
 
-// نماد را از حاشیه خالی جدا می‌کنیم و در یک مربع با حاشیه کم می‌گذاریم
+// نماد را از حاشیه خالی جدا می کنیم و در یک مربع با حاشیه کم می گذاریم
 const trimmed = await sharp(SRC_ICON).trim().toBuffer();
 const { width: tw, height: th } = await sharp(trimmed).metadata();
 const side = Math.round(Math.max(tw, th) * 1.04);
@@ -23,7 +23,7 @@ const png = (size, bg = clear) =>
 
 // گوگل: مربع و ضلع مضرب ۴۸ پیکسل (۴۸، ۹۶، ۱۹۲ ...)
 for (const s of [48, 96, 192]) fs.writeFileSync(`public/favicon-${s}x${s}.png`, await png(s));
-// iOS پس‌زمینه شفاف را مشکی نشان می‌دهد؛ برای apple-touch-icon پس‌زمینه سفید
+// iOS پس زمینه شفاف را مشکی نشان می دهد؛ برای apple-touch-icon پس زمینه سفید
 const pad = await sharp(square).resize(150, 150).toBuffer();
 fs.writeFileSync(
   "public/apple-touch-icon.png",
@@ -53,7 +53,7 @@ const dir = sizes.map((s, i) => {
 });
 fs.writeFileSync("public/favicon.ico", Buffer.concat([header, ...dir, ...imgs]));
 
-// لوگوی کامل برای هدر: ارتفاع ۱۵۰ پیکسل (برای نمایش ۵۰ پیکسلی روی صفحه‌های رتینا)
+// لوگوی کامل برای هدر: ارتفاع ۱۵۰ پیکسل (برای نمایش ۵۰ پیکسلی روی صفحه های رتینا)
 await sharp(SRC_LOGO).trim().resize({ height: 150 }).webp({ quality: 90, alphaQuality: 100 }).toFile("public/images/logo-kojahast.webp");
 await sharp(SRC_LOGO).trim().resize({ height: 300 }).png({ compressionLevel: 9 }).toFile("public/images/logo-kojahast.png");
 

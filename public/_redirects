@@ -1,4 +1,4 @@
-# ریدایرکت‌های دائمی (Cloudflare Pages / Netlify)
+# ریدایرکت های دائمی (Cloudflare Pages / Netlify)
 # اسلاگ اشتباه قدیمی سرفیس
 /blog/urface-repair-in-tehran/        /blog/surface-repair-in-tehran/   301
 /blog/urface-repair-in-tehran         /blog/surface-repair-in-tehran/   301
@@ -8,5 +8,5 @@
 # فید
 /feed/                                /feed.xml   301
 /feed                                 /feed.xml   301
-# سایت‌مپ قدیمی
+# سایت مپ قدیمی
 /sitemap.xml                          /sitemap-index.xml   301

@@ -1,11 +1,11 @@
-// بریف کلمات کلیدی را از scripts/data/keyword-briefs.json در frontmatter مقالات می‌نویسد
-// (بعد از خط keyword) و عبارت‌هایی را که در متن نیامده‌اند گزارش می‌کند.
+// بریف کلمات کلیدی را از scripts/data/keyword-briefs.json در frontmatter مقالات می نویسد
+// (بعد از خط keyword) و عبارت هایی را که در متن نیامده اند گزارش می کند.
 // اجرا: node scripts/apply-briefs.mjs [--dry]
 import fs from "node:fs";
 
 const briefs = JSON.parse(fs.readFileSync("scripts/data/keyword-briefs.json", "utf8"));
 const dry = process.argv.includes("--dry");
-const norm = (s) => String(s).replace(/[‌\s]+/g, " ").replace(/ي/g, "ی").replace(/ك/g, "ک").toLowerCase();
+const norm = (s) => String(s).replace(/[\u200c\s]+/g, " ").replace(/ي/g, "ی").replace(/ك/g, "ک").toLowerCase();
 const yamlList = (arr) => `[${arr.map((x) => JSON.stringify(x)).join(", ")}]`;
 
 for (const [slug, b] of Object.entries(briefs)) {

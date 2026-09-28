@@ -6,7 +6,7 @@ export type Post = CollectionEntry<"posts">;
 
 const byModified = (a: Post, b: Post) => b.data.modifiedTime.localeCompare(a.data.modifiedTime);
 
-/** همه مقالات منتشرشده (پیش‌نویس‌ها فقط در حالت توسعه) */
+/** همه مقالات منتشرشده (پیش نویس ها فقط در حالت توسعه) */
 export async function getPosts() {
   const all = await getCollection("posts", ({ data }) => import.meta.env.DEV || !data.draft);
   return all.sort(byModified);
@@ -14,7 +14,7 @@ export async function getPosts() {
 
 export const categoryOf = (p: Post) => CATEGORIES[p.data.category as CategorySlug];
 
-/** عنوان کوتاه برای کارت‌ها و کاشی‌ها */
+/** عنوان کوتاه برای کارت ها و کاشی ها */
 export const shortLabel = (p: Post) => p.data.brand ?? p.data.h1 ?? p.data.title;
 
 /** شمارش کلمات کل صفحه */
@@ -29,7 +29,7 @@ export function postWordCount(p: Post) {
   return countWords(plain(parts.join(" ")));
 }
 
-/** کلاسترهای یک پیلار (هم‌دسته، غیر پیلار) */
+/** کلاسترهای یک پیلار (هم دسته، غیر پیلار) */
 export function clustersOf(pillar: Post, all: Post[]) {
   return all.filter((p) => p.data.category === pillar.data.category && !p.data.pillar);
 }
@@ -39,8 +39,8 @@ export function pillarOf(p: Post, all: Post[]) {
 }
 
 /**
- * مقالات مرتبط: اول فیلد related، سپس هم‌دسته‌ها و در آخر سایر مقالات.
- * پیلار از لیست حذف می‌شود چون جداگانه لینک داده می‌شود.
+ * مقالات مرتبط: اول فیلد related، سپس هم دسته ها و در آخر سایر مقالات.
+ * پیلار از لیست حذف می شود چون جداگانه لینک داده می شود.
  */
 export function relatedOf(p: Post, all: Post[], limit = 3) {
   const out: Post[] = [];

@@ -12,10 +12,10 @@ const { c, n } = Astro.props;
 
 const hasGeo = typeof c.lat === "number" && typeof c.lng === "number";
 
-// نقشه جاسازی‌شده گوگل (بدون نیاز به کلید API)؛ با مختصات دقیق‌تر است و بدون آن با نام و آدرس جستجو می‌شود
+// نقشه جاسازی شده گوگل (بدون نیاز به کلید API)؛ با مختصات دقیق تر است و بدون آن با نام و آدرس جستجو می شود
 const mapQuery = encodeURIComponent(hasGeo ? `${c.lat},${c.lng}` : `${c.name}، ${c.address}`);
 const mapEmbed = `https://maps.google.com/maps?q=${mapQuery}&hl=fa&z=16&output=embed`;
-// مسیریابی داخلی فقط وقتی مختصات داریم (بدون مختصات، لینک بی‌فایده نمی‌سازیم)
+// مسیریابی داخلی فقط وقتی مختصات داریم (بدون مختصات، لینک بی فایده نمی سازیم)
 const neshan = hasGeo ? `https://nshn.ir/maps?destination=${c.lat},${c.lng}&type=drive` : null;
 const balad = hasGeo ? `https://balad.ir/directions/driving?destination=${c.lng},${c.lat}` : null;
 const ext = { target: "_blank", rel: "nofollow noopener noreferrer" };
@@ -96,7 +96,7 @@ const hasSocial = Boolean(c.instagram || c.telegram || c.whatsapp || website);
 
       {hasSocial && (
         <div class="cc__row">
-          <dt><span class="cc__ico"><Icon name="lucide:message-circle" /></span>شبکه‌های اجتماعی</dt>
+          <dt><span class="cc__ico"><Icon name="lucide:message-circle" /></span>شبکه های اجتماعی</dt>
           <dd class="cc__pills">
             {c.instagram && (
               <a class="cc__pill" href={instagramUrl(c.instagram)} {...ext}>
@@ -110,7 +110,7 @@ const hasSocial = Boolean(c.instagram || c.telegram || c.whatsapp || website);
             )}
             {c.whatsapp && (
               <a class="cc__pill" href={whatsappUrl(c.whatsapp)} {...ext}>
-                <Icon name="simple-icons:whatsapp" /><span>واتس‌اپ</span>
+                <Icon name="simple-icons:whatsapp" /><span>واتس اپ</span>
               </a>
             )}
             {website && (
@@ -184,7 +184,7 @@ const hasSocial = Boolean(c.instagram || c.telegram || c.whatsapp || website);
   .cc__box--cons h4 { color: var(--danger); }
   .cc__box--cons .cc__mark { background: var(--danger); color: #fff; }
 
-  /* اطلاعات تماس: ردیف‌های منظم برچسب/مقدار */
+  /* اطلاعات تماس: ردیف های منظم برچسب/مقدار */
   .cc__loc { border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; background: #fff; }
   .cc__info { margin: 0; font-size: .9rem; }
   .cc__map { position: relative; height: 280px; border-top: 1px solid var(--line); background: var(--bg-soft); }

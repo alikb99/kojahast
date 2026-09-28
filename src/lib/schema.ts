@@ -1,5 +1,5 @@
 /**
- * سازنده‌های JSON-LD. همه صفحات یک @graph واحد دارند که با @id به هم وصل شده‌اند:
+ * سازنده های JSON-LD. همه صفحات یک @graph واحد دارند که با @id به هم وصل شده اند:
  * Organization ← WebSite ← WebPage ← (Article | CollectionPage) ← BreadcrumbList / ItemList / FAQPage
  */
 import { SITE } from "../data/site";
@@ -159,7 +159,7 @@ export function articleGraph(post: Post, url: string, crumbs: Crumb[], wordCount
       dateModified: d.modifiedTime,
       inLanguage: SITE.lang,
       wordCount,
-      // crumbs[1] همیشه دسته است؛ در کلاسترها crumbs[length-2] پیلار می‌شد
+      // crumbs[1] همیشه دسته است؛ در کلاسترها crumbs[length-2] پیلار می شد
       articleSection: crumbs[1]?.name,
       keywords: [...new Set([d.keyword, ...d.keywords, ...d.lsi, d.brand].filter(Boolean))].join("، "),
       author: { "@type": "Organization", name: `تیم تحریریه ${SITE.name}`, url: abs("/about/") },

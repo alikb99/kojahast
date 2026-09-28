@@ -1,5 +1,5 @@
 // اعتبارسنجی JSON-LD صفحات بیلدشده: npm run build && node scripts/check-schema.mjs
-// پارس JSON، فیلدهای الزامی هر نوع، ارجاع‌های @id، بردکرامب، FAQ، ItemList و LocalBusiness را بررسی می‌کند.
+// پارس JSON، فیلدهای الزامی هر نوع، ارجاع های @id، بردکرامب، FAQ، ItemList و LocalBusiness را بررسی می کند.
 import fs from "node:fs";
 import path from "node:path";
 
@@ -29,6 +29,9 @@ for (const f of files) {
   const html = fs.readFileSync(f, "utf8");
   const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => m[1]);
   const errs = [];
+  // قاعده سایت: نیم فاصله (U+200C) نباید در هیچ صفحه ای باشد
+  const zw = (html.match(/\u200c/g) || []).length;
+  if (zw) errs.push(`${zw} half-space (ZWNJ) in page`);
   if (!blocks.length && !f.includes("404")) errs.push("no JSON-LD");
 
   for (const b of blocks) {

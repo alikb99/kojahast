@@ -160,7 +160,7 @@ p { margin: 0; }
   .grid--4 { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* کارت راهنما (مثل کارت‌های Explore در قالب مرجع) */
+/* کارت راهنما (مثل کارت های Explore در قالب مرجع) */
 .post-card {
   position: relative; display: flex; flex-direction: column; overflow: hidden;
   background: #fff; border-radius: var(--radius); border: 1px solid var(--line);
