@@ -1,147 +1,113 @@
 ---
 import { Icon } from "astro-icon/components";
-const year = new Date().getFullYear();
+import Logo from "./Logo.astro";
+import { SITE, CATEGORIES } from "../data/site";
+import { getPosts, shortLabel } from "../lib/posts";
+import { fa, postUrl, categoryUrl, telHref } from "../lib/utils";
+
+const posts = await getPosts();
+const pillars = posts.filter((p) => p.data.pillar);
+const byCat = (slug: string) => posts.filter((p) => p.data.category === slug && !p.data.pillar).slice(0, 6);
+const year = fa(new Intl.DateTimeFormat("en-u-ca-persian", { year: "numeric" }).format(new Date()).replace(/\D/g, ""));
+
+const socialIcons: Record<string, string> = {
+  instagram: "simple-icons:instagram",
+  telegram: "simple-icons:telegram",
+  whatsapp: "simple-icons:whatsapp",
+  linkedin: "simple-icons:linkedin",
+};
+const socials = Object.entries(SITE.socials).filter(([, v]) => v);
 ---
 
 <footer class="footer">
-  <div class="footer-container">
-    <!-- معرفی سایت -->
-    <div class="footer-about">
-      <h3>کجا هست</h3>
+  <div class="container footer__grid">
+    <section class="footer__col footer__about">
+      <Logo light />
       <p>
-        «کجا هست» مرجع معرفی مراکز تخصصی تعمیرات موبایل، لپ‌تاپ و
-        گجت‌های دیجیتال در تهران است. تلاش ما کمک به انتخاب آگاهانه،
-        سریع و مطمئن کاربران است.
+        {SITE.name} راهنمای مقایسه‌ای مراکز خدمات و تعمیرات تهران است. اطلاعات هر مرکز را از چند منبع جمع می‌کنیم، تماس می‌گیریم و
+        نقاط قوت و ضعفش را صادقانه می‌نویسیم تا با خیال راحت‌تر انتخاب کنید.
       </p>
-    </div>
+      {socials.length > 0 && (
+        <div class="footer__social">
+          {socials.map(([k, v]) => (
+            <a href={v} target="_blank" rel="noopener" aria-label={k}>
+              <Icon name={socialIcons[k] ?? "lucide:globe"} />
+            </a>
+          ))}
+        </div>
+      )}
+    </section>
 
-    <!-- لینک‌های سریع -->
-    <div class="footer-links">
-      <h4>لینک‌های سریع</h4>
-      <ul>
-        <li>
-          <a href="/blog/category/mobile-repairs/">تعمیرات موبایل</a>
-        </li>
-        <li>
-          <a href="/blog/category/laptop-repairs/">تعمیرات لپ تاپ</a>
-        </li>
-        <li>
-          <a href="/about/">درباره ما</a>
-        </li>
-        <li>
-          <a href="/contact/">تماس با ما</a>
-        </li>
+    {Object.values(CATEGORIES).map((cat) => (
+      <nav class="footer__col" aria-label={cat.name}>
+        <h2 class="footer__title">{cat.shortName}</h2>
+        <ul>
+          <li><a href={categoryUrl(cat.slug)}>همه راهنماهای {cat.name}</a></li>
+          {pillars.filter((p) => p.data.category === cat.slug).map((p) => (
+            <li><a href={postUrl(p.id)}>{p.data.keyword}</a></li>
+          ))}
+          {byCat(cat.slug).map((p) => (
+            <li><a href={postUrl(p.id)}>{p.data.keyword ?? shortLabel(p)}</a></li>
+          ))}
+        </ul>
+      </nav>
+    ))}
+
+    <section class="footer__col">
+      <h2 class="footer__title">ارتباط با ما</h2>
+      <ul class="footer__contact">
+        <li><Icon name="lucide:phone" /><a href={telHref(SITE.phone)} class="ltr">{SITE.phoneDisplay}</a></li>
+        <li><Icon name="lucide:mail" /><a href={`mailto:${SITE.email}`} class="ltr">{SITE.email}</a></li>
+        <li><Icon name="lucide:clock" /><span>{SITE.hours}</span></li>
+        <li><Icon name="lucide:map-pin" /><span>{SITE.address}</span></li>
       </ul>
-    </div>
-
-    <!-- شبکه‌های اجتماعی -->
-    <div class="footer-social">
-      <h4>ما را دنبال کنید</h4>
-      <div class="social-icons">
-        <a href="#" aria-label="Instagram">
-          <Icon name="simple-icons:instagram" size={22} />
-        </a>
-        <a href="#" aria-label="Telegram">
-          <Icon name="simple-icons:telegram" size={22} />
-        </a>
-        <a href="#" aria-label="WhatsApp">
-          <Icon name="simple-icons:whatsapp" size={22} />
-        </a>
-        <a href="#" aria-label="YouTube">
-          <Icon name="simple-icons:youtube" size={22} />
-        </a>
-        <a href="#" aria-label="LinkedIn">
-          <Icon name="simple-icons:linkedin" size={22} />
-        </a>
-      </div>
-    </div>
+      <ul class="footer__links">
+        <li><a href="/about/">درباره ما و روش بررسی مراکز</a></li>
+        <li><a href="/contact/">تماس و گزارش اطلاعات نادرست</a></li>
+        <li><a href="/contact/#add-business">ثبت رایگان کسب‌وکار</a></li>
+        <li><a href="/blog/">همه راهنماها</a></li>
+      </ul>
+    </section>
   </div>
 
-  <!-- کپی رایت -->
-  <div class="footer-bottom">
-    <p>
-      © {year} تمامی حقوق این وب‌سایت متعلق به <strong>کجا هست</strong> می‌باشد.
-    </p>
+  <div class="footer__bottom">
+    <div class="container footer__bottom-inner">
+      <p>© {year} {SITE.name} — همه حقوق محفوظ است.</p>
+      <a href="/feed.xml" class="footer__rss"><Icon name="lucide:rss" /> فید RSS</a>
+    </div>
   </div>
 </footer>
 
 <style>
-  .footer {
-    background: #0f172a;
-    color: #e5e7eb;
-    margin-top: 4rem;
+  .footer { background: var(--footer); color: #c9cdd1; margin-top: 0; position: relative; overflow: hidden; }
+  .footer::before, .footer::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(255, 255, 255, .06);
+    transform: skewX(18deg); pointer-events: none;
   }
-
-  .footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 3rem 1.5rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 2rem;
+  .footer::before { right: 6%; }
+  .footer::after { left: 6%; transform: skewX(-18deg); }
+  .footer__grid { display: grid; gap: 32px; padding-block: 48px 36px; grid-template-columns: 1fr; position: relative; z-index: 1; }
+  @media (min-width: 640px) { .footer__grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) { .footer__grid { grid-template-columns: 1.3fr 1fr 1fr 1.2fr; } }
+  .footer__about p { margin-top: 14px; font-size: .88rem; line-height: 2.1; color: #aeb3b8; }
+  .footer__title {
+    color: #fff; font-size: 1rem; padding-bottom: 10px; margin-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, .12);
+    position: relative;
   }
-
-  .footer h3,
-  .footer h4 {
-    color: #ffffff;
-    margin-bottom: 0.75rem;
-  }
-
-  .footer-about p {
-    font-size: 0.95rem;
-    line-height: 1.8;
-    color: #cbd5f5;
-  }
-
-  .footer-links ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .footer-links li {
-    margin-bottom: 0.5rem;
-  }
-
-  .footer-links a {
-    color: #cbd5f5;
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .footer-links a:hover {
-    color: #38bdf8;
-  }
-
-  .footer-social .social-icons {
-    display: flex;
-    gap: 0.75rem;
-    margin-top: 0.5rem;
-  }
-
-  .footer-social a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    color: #e5e7eb;
-    transition: background 0.2s ease, transform 0.2s ease;
-  }
-
-  .footer-social a:hover {
-    background: #38bdf8;
-    color: #020617;
-    transform: translateY(-2px);
-  }
-
-  .footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    text-align: center;
-    padding: 1rem;
-    font-size: 0.85rem;
-    color: #94a3b8;
-  }
+  .footer__title::after { content: ""; position: absolute; right: 0; bottom: -1px; width: 36px; height: 2px; background: var(--brand); }
+  .footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: .86rem; }
+  .footer__col nav ul li, .footer ul:not(.footer__contact) li { position: relative; padding-right: 14px; }
+  .footer ul:not(.footer__contact) li::before { content: ""; position: absolute; right: 0; top: .85em; width: 5px; height: 5px; background: var(--brand); border-radius: 1px; }
+  .footer a:hover { color: #fff; }
+  .footer__contact li { display: flex; gap: 10px; align-items: flex-start; line-height: 1.9; }
+  .footer__contact svg { width: 16px; height: 16px; color: var(--brand); flex: none; margin-top: 6px; }
+  .footer__links { margin-top: 16px !important; }
+  .footer__social { display: flex; gap: 8px; margin-top: 16px; }
+  .footer__social a { width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, .08); display: grid; place-items: center; }
+  .footer__social a:hover { background: var(--brand); }
+  .footer__social svg { width: 16px; height: 16px; }
+  .footer__bottom { background: var(--footer-2); font-size: .82rem; position: relative; z-index: 1; }
+  .footer__bottom-inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding-block: 14px; }
+  .footer__rss { display: inline-flex; align-items: center; gap: 6px; }
+  .footer__rss svg { width: 15px; height: 15px; color: var(--accent); }
 </style>

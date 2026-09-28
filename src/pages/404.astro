@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SearchBox from "../components/SearchBox.astro";
+import { CATEGORIES } from "../data/site";
+import { categoryUrl } from "../lib/utils";
+
+const seo = {
+  title: "صفحه پیدا نشد | کجا هست",
+  description: "صفحه‌ای که دنبالش بودید پیدا نشد. از جستجو یا دسته‌بندی‌ها استفاده کنید.",
+  path: "/404/",
+  noindex: true,
+};
+---
+
+<BaseLayout seo={seo}>
+  <section class="section nf">
+    <div class="container nf__inner">
+      <p class="nf__code">۴۰۴</p>
+      <h1>این صفحه کجا هست؟ پیدایش نکردیم!</h1>
+      <p class="muted">شاید آدرس تغییر کرده باشد. جستجو کنید یا از دسته‌ها شروع کنید.</p>
+      <SearchBox id="nf-search" />
+      <div class="nf__links">
+        <a class="btn btn--brand" href="/">صفحه اصلی</a>
+        {Object.values(CATEGORIES).map((c) => <a class="btn btn--ghost" href={categoryUrl(c.slug)}>{c.shortName}</a>)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf__inner { text-align: center; display: grid; gap: 16px; justify-items: center; max-width: 680px; }
+  .nf__code { font-size: 5rem; font-weight: 900; color: var(--brand-600); line-height: 1; }
+  .nf h1 { font-size: 1.6rem; }
+  .nf__links { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+</style>

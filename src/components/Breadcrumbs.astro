@@ -1,0 +1,17 @@
+---
+import type { Crumb } from "../lib/schema";
+type Props = { items: Crumb[] };
+const { items } = Astro.props;
+---
+
+<nav class="crumbs" aria-label="مسیر صفحه">
+  <ol>
+    {items.map((c, i) =>
+      i === items.length - 1 ? (
+        <li><span aria-current="page">{c.name}</span></li>
+      ) : (
+        <li><a href={c.url}>{c.name}</a></li>
+      )
+    )}
+  </ol>
+</nav>

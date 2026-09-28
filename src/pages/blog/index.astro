@@ -1,32 +1,96 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import PostCard from "../../components/PostCard.astro";
+import SearchBox from "../../components/SearchBox.astro";
+import { CATEGORIES } from "../../data/site";
+import { getPosts } from "../../lib/posts";
+import { organization, website, webPage, breadcrumb, graph, type Crumb } from "../../lib/schema";
+import { abs, fa, postUrl, categoryUrl } from "../../lib/utils";
 
-const posts = await getCollection("posts");
-const sorted = posts
-  .slice()
-  .sort((a, b) => (b.data.publishedTime ?? "").localeCompare(a.data.publishedTime ?? ""));
+const posts = await getPosts();
+const url = "/blog/";
+const crumbs: Crumb[] = [
+  { name: "خانه", url: "/" },
+  { name: "راهنماها", url },
+];
+const title = "همه راهنماهای مقایسه مراکز تعمیر در تهران | کجا هست";
+const description = `فهرست ${fa(posts.length)} راهنمای مقایسه مراکز تعمیر موبایل، لپ‌تاپ و گجت در تهران؛ هر راهنما با جدول آدرس، تلفن و ساعت کاری مراکز.`;
 
 const seo = {
-  title: "مقالات | کجا هست",
-  description: "آخرین مقالات معرفی مراکز خدمات و تعمیرات.",
-  canonical: "https://kojahast.com/blog/",
-  og: { type: "website" },
-  twitter: {},
-  jsonLd: [],
+  title,
+  description,
+  path: url,
+  jsonLd: graph(
+    organization(),
+    website(),
+    { ...webPage({ url, name: title, description, type: "CollectionPage", hasBreadcrumb: true }),
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: posts.length,
+        itemListElement: posts.map((p, i) => ({ "@type": "ListItem", position: i + 1, url: abs(postUrl(p.id)), name: p.data.h1 ?? p.data.title })),
+      } },
+    breadcrumb(url, crumbs)
+  ),
 };
 ---
 
 <BaseLayout seo={seo}>
-  <main>
-    <h1>مقالات</h1>
+  <header class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={crumbs} />
+      <h1>همه راهنماها</h1>
+      <p class="lead">هر راهنما با یک جدول مقایسه شروع می‌شود؛ بعد تک‌تک مراکز را با خدمات، نقاط قوت و ضعف و راه‌های ارتباطی بررسی می‌کند.</p>
+      <div class="blog-search"><SearchBox id="blog-search" /></div>
+      <p class="blog-q" data-q-note hidden></p>
+    </div>
+  </header>
 
-    <ul>
-      {sorted.map((p) => (
-        <li>
-          <a href={`/blog/${p.slug}/`}>{p.data.title}</a>
-        </li>
-      ))}
-    </ul>
-  </main>
+  {Object.values(CATEGORIES).map((cat) => {
+    const list = posts.filter((p) => p.data.category === cat.slug);
+    return (
+      <section class="section blog-cat" aria-labelledby={`cat-${cat.slug}`}>
+        <div class="container">
+          <div class="blog-cat__head">
+            <h2 id={`cat-${cat.slug}`}>{cat.name}</h2>
+            <a class="btn btn--ghost btn--sm" href={categoryUrl(cat.slug)}>صفحه دسته</a>
+          </div>
+          <div class="grid grid--4">
+            {list.map((p) => <PostCard post={p} />)}
+          </div>
+        </div>
+      </section>
+    );
+  })}
 </BaseLayout>
+
+<script>
+  // فیلتر نتایج وقتی فرم جستجو بدون جاوااسکریپت ارسال شده (/blog/?q=...)
+  const q = new URLSearchParams(location.search).get("q")?.trim();
+  if (q) {
+    const norm = (s: string) => s.replace(/ي/g, "ی").replace(/ك/g, "ک").replace(/‌/g, " ").toLowerCase();
+    const words = norm(q).split(/\s+/);
+    let n = 0;
+    document.querySelectorAll<HTMLElement>(".post-card").forEach((c) => {
+      const ok = words.every((w) => norm(c.textContent ?? "").includes(w));
+      c.hidden = !ok;
+      if (ok) n++;
+    });
+    const note = document.querySelector<HTMLElement>("[data-q-note]");
+    if (note) {
+      note.hidden = false;
+      note.textContent = n ? `نتایج برای «${q}»: ${n.toLocaleString("fa-IR")} راهنما` : `راهنمایی برای «${q}» پیدا نشد؛ عبارت کوتاه‌تری امتحان کنید.`;
+    }
+    const input = document.querySelector<HTMLInputElement>("#blog-search");
+    if (input) input.value = q;
+  }
+</script>
+
+<style>
+  .blog-search { margin-top: 20px; max-width: 620px; }
+  .blog-search :global(.search) { margin: 0; box-shadow: var(--shadow); }
+  .blog-q { margin-top: 12px; font-weight: 700; color: var(--brand-700); }
+  .blog-cat + .blog-cat { padding-top: 0; }
+  .blog-cat__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 12px; }
+  .blog-cat__head h2 { font-size: 1.35rem; padding-right: 12px; border-right: 4px solid var(--brand); }
+</style>

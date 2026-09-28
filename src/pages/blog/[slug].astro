@@ -1,57 +1,239 @@
 ---
+import { render } from "astro:content";
+import { Icon } from "astro-icon/components";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CentersTable from "../../components/article/CentersTable.astro";
+import CenterCard from "../../components/article/CenterCard.astro";
+import FaqList from "../../components/FaqList.astro";
+import PostCard from "../../components/PostCard.astro";
+import { SITE, BRAND_ICONS } from "../../data/site";
+import {
+  getPosts, categoryOf, clustersOf, pillarOf, relatedOf, postWordCount, shortLabel, type Post,
+} from "../../lib/posts";
+import { articleGraph, type Crumb } from "../../lib/schema";
+import { fa, jalali, inlineMd, readingMinutes, postUrl, categoryUrl, telHref } from "../../lib/utils";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("posts");
-  return posts.map((p) => ({ params: { slug: p.slug } })); 
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
 }
 
-const { slug } = Astro.params;
+const { post } = Astro.props as { post: Post };
+const all = await getPosts();
+const d = post.data;
+const { Content, headings } = await render(post);
 
-const posts = await getCollection("posts", ({ slug: s }) => s === slug);
-const post = posts[0];
-if (!post) throw new Error(`Post not found for slug: ${slug}`);
+const cat = categoryOf(post);
+const url = postUrl(post.id);
+const words = postWordCount(post);
+const pillar = pillarOf(post, all);
+const clusters = d.pillar ? clustersOf(post, all) : [];
+const related = relatedOf(post, all, 3);
+const otherPillar = all.find((p) => p.data.pillar && p.data.category !== d.category);
 
-const { Content } = await post.render(); 
-
-const jsonLd = [
-  ...(post.data.schemaGraph ? [post.data.schemaGraph] : []),
-  ...(post.data.schemaFAQ ? [post.data.schemaFAQ] : []),
-  ...(post.data.schemaBreadcrumb ? [post.data.schemaBreadcrumb] : []),
-  ...(post.data.schemaExtras ?? []),
+const crumbs: Crumb[] = [
+  { name: "خانه", url: "/" },
+  { name: cat.name, url: categoryUrl(cat.slug) },
+  ...(pillar && !d.pillar ? [{ name: pillar.data.keyword, url: postUrl(pillar.id) }] : []),
+  { name: d.brand ? `تعمیر ${d.brand}` : d.keyword, url },
 ];
 
-const canonical = `https://kojahast.com/blog/${post.slug}/`;
+const toc = [
+  { id: "ctable-title", text: "جدول مقایسه مراکز", depth: 2 },
+  { id: "centers", text: "معرفی و بررسی مراکز", depth: 2 },
+  ...d.centers.map((c) => ({ id: c.id, text: c.name, depth: 3 })),
+  ...headings.filter((h) => h.depth === 2).map((h) => ({ id: h.slug, text: h.text, depth: 2 })),
+  ...(d.faq.length ? [{ id: "faq", text: "سؤالات متداول", depth: 2 }] : []),
+];
 
 const seo = {
-  title: post.data.title,
-  description: post.data.description,
-  canonical,
-  robots: post.data.robots,
-  og: {
-    ...post.data.og,
-    url: canonical,
-    siteName: "کجا هست",
-  },
-  twitter: post.data.twitter,
-  jsonLd,
+  title: d.title,
+  description: d.description,
+  path: url,
+  image: d.image,
+  imageAlt: d.imageAlt,
+  type: "article" as const,
+  publishedTime: d.publishedTime,
+  modifiedTime: d.modifiedTime,
+  section: cat.name,
+  jsonLd: articleGraph(post, url, crumbs, words),
 };
 ---
 
 <BaseLayout seo={seo}>
-  <main class="mx-auto max-w-3xl px-4 py-10">
-    <article>
-      <h1 class="text-2xl font-black leading-10">{post.data.title}</h1>
-      <div class="mt-3 text-sm text-zinc-600">
-        <a class="underline" href={`/blog/category/${post.data.category.slug}/`}>
-          {post.data.category.name}
-        </a>
+  <header class="page-hero art-hero">
+    <div class="container art-hero__grid">
+      <div>
+        <Breadcrumbs items={crumbs} />
+        <div class="art-hero__chips">
+          <a class="chip" href={categoryUrl(cat.slug)}><Icon name={cat.icon} />{cat.name}</a>
+          {d.pillar && <span class="chip chip--accent"><Icon name="lucide:book-open" />راهنمای جامع</span>}
+        </div>
+        <h1>{d.h1 ?? d.title}</h1>
+        <p class="lead" set:html={inlineMd(d.lead)} />
+        <ul class="art-meta">
+          <li><Icon name="lucide:calendar" />بروزرسانی: <time datetime={d.modifiedTime}>{jalali(d.modifiedTime)}</time></li>
+          <li><Icon name="lucide:map-pin" />{fa(d.centers.length)} مرکز در {d.city}</li>
+          <li><Icon name="lucide:clock" />{fa(readingMinutes(words))} دقیقه مطالعه</li>
+          <li><Icon name="lucide:badge-check" /><a href="/about/#method">بررسی تیم تحریریه {SITE.name}</a></li>
+        </ul>
+      </div>
+      <figure class="art-hero__img">
+        <img src={d.image} alt={d.imageAlt} width="800" height="460" fetchpriority="high" decoding="async" />
+      </figure>
+    </div>
+  </header>
+
+  <div class="container art-layout">
+    <div class="art-main">
+      <CentersTable centers={d.centers} title={`خلاصه مقایسه ${d.brand ? `مراکز تعمیر ${d.brand}` : "مراکز"}`} />
+
+      <section class="art-centers" aria-labelledby="centers">
+        <h2 id="centers" class="art-h2">معرفی و بررسی {fa(d.centers.length)} مرکز</h2>
+        <p class="muted art-note">
+          ترتیب لیست به معنی رتبه‌بندی نیست. قبل از مراجعه حتماً تماس بگیرید؛ ساعت کاری و قیمت‌ها ممکن است تغییر کرده باشد.
+        </p>
+        {d.centers.map((c, i) => <CenterCard c={c} n={i + 1} />)}
+      </section>
+
+      <div class="prose art-body">
+        <Content />
       </div>
 
-      <div class="prose prose-zinc mt-8 max-w-none leading-8">
-        <Content />  {/* ✅ */}
+      {d.pillar && clusters.length > 0 && (
+        <section class="art-clusters" aria-labelledby="clusters-title">
+          <h2 id="clusters-title" class="art-h2">راهنمای تعمیر بر اساس برند</h2>
+          <div class="art-clusters__grid">
+            {clusters.map((p) => (
+              <a class="tile" href={postUrl(p.id)}>
+                <span class="tile__icon" style="background:var(--brand-600)">
+                  <Icon name={BRAND_ICONS[p.data.brand ?? ""] ?? cat.icon} />
+                </span>
+                <span class="tile__name">{p.data.keyword}</span>
+                <span class="tile__count">({fa(p.data.centers.length)})</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <aside class="art-method" id="method">
+        <Icon name="lucide:shield-check" />
+        <div>
+          <h2>این لیست را چطور تهیه کردیم؟</h2>
+          <p>
+            اطلاعات هر مرکز از چند منبع (سایت و شبکه‌های رسمی خود مرکز، نقشه‌ها، دایرکتوری‌های معتبر و تجربه کاربران) جمع و تطبیق داده
+            شده است. نقاط ضعف را هم به همان اندازه نقاط قوت جدی گرفته‌ایم. اگر اطلاعاتی قدیمی شده یا تجربه متفاوتی داشتید،
+            <a href="/contact/">به ما خبر بدهید</a> تا بررسی و اصلاح کنیم.
+          </p>
+        </div>
+      </aside>
+
+      {d.faq.length > 0 && (
+        <section class="art-faq" aria-labelledby="faq">
+          <h2 id="faq" class="art-h2">سؤالات متداول</h2>
+          <FaqList items={d.faq} />
+        </section>
+      )}
+    </div>
+
+    <aside class="art-side" aria-label="دسترسی سریع">
+      <div class="side-box side-toc">
+        <h2 class="side-box__title"><Icon name="lucide:list" />فهرست مطالب</h2>
+        <nav aria-label="فهرست مطالب">
+          <ol>
+            {toc.map((t) => (
+              <li class={t.depth === 3 ? "is-sub" : undefined}><a href={`#${t.id}`}>{t.text}</a></li>
+            ))}
+          </ol>
+        </nav>
       </div>
-    </article>
-  </main>
+
+      {pillar && !d.pillar && (
+        <a class="side-box side-pillar" href={postUrl(pillar.id)}>
+          <span class="chip chip--accent">راهنمای جامع</span>
+          <strong>{pillar.data.h1 ?? pillar.data.title}</strong>
+          <span class="side-pillar__more">{fa(pillar.data.centers.length)} مرکز <Icon name="lucide:arrow-left" /></span>
+        </a>
+      )}
+
+      <div class="side-box side-cta">
+        <Icon name="lucide:phone" />
+        <strong>نمی‌دانید کدام مرکز مناسب شماست؟</strong>
+        <p>مشکل دستگاه را بگویید، مرکز مناسب را معرفی می‌کنیم.</p>
+        <a class="btn btn--brand btn--sm" href={telHref(SITE.phone)}><span class="ltr">{SITE.phoneDisplay}</span></a>
+      </div>
+    </aside>
+  </div>
+
+  <section class="section section--soft art-related" aria-labelledby="related-title">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="related-title">راهنماهای مرتبط</h2>
+      </div>
+      <div class="grid grid--3">
+        {related.map((p) => <PostCard post={p} />)}
+      </div>
+      <div class="art-related__links">
+        {pillar && !d.pillar && <a class="btn btn--brand" href={postUrl(pillar.id)}>{pillar.data.keyword}: لیست کامل</a>}
+        {d.pillar && otherPillar && <a class="btn btn--brand" href={postUrl(otherPillar.id)}>{otherPillar.data.keyword}</a>}
+        <a class="btn btn--ghost" href={categoryUrl(cat.slug)}>همه راهنماهای {cat.name}</a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  .art-hero { padding-bottom: 32px; }
+  .art-hero__grid { display: grid; gap: 24px; align-items: center; }
+  @media (min-width: 1024px) { .art-hero__grid { grid-template-columns: 1.35fr 1fr; gap: 40px; } }
+  .art-hero__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .art-hero :global(.lead a) { color: var(--brand-700); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+  .art-meta { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: .84rem; color: var(--ink-2); }
+  .art-meta li { display: inline-flex; align-items: center; gap: 6px; }
+  .art-meta svg { width: 16px; height: 16px; color: var(--brand); }
+  .art-meta a:hover { color: var(--brand-700); text-decoration: underline; }
+  .art-hero__img { margin: 0; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); aspect-ratio: 16 / 10; background: #fff; }
+  .art-hero__img img { width: 100%; height: 100%; object-fit: cover; }
+
+  .art-layout { display: grid; gap: 32px; padding-block: 36px 56px; }
+  @media (min-width: 1024px) { .art-layout { grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; } }
+  .art-main { display: grid; gap: 28px; min-width: 0; }
+  .art-h2 { font-size: 1.4rem; scroll-margin-top: calc(var(--header-h) + 16px); }
+  .art-centers { display: grid; gap: 20px; }
+  .art-note { font-size: .85rem; margin-top: -8px; }
+  .art-body :global(h2:first-child) { margin-top: 0.5em; }
+
+  .art-clusters__grid { display: grid; gap: 10px; margin-top: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .art-clusters__grid { grid-template-columns: 1fr 1fr; } }
+
+  .art-method {
+    display: flex; gap: 14px; padding: 18px; border-radius: var(--radius); background: var(--accent-50); border: 1px solid #f7df9f;
+  }
+  .art-method > :global(svg) { width: 28px; height: 28px; color: var(--accent-600); flex: none; }
+  .art-method h2 { font-size: 1rem; margin-bottom: 6px; }
+  .art-method p { font-size: .9rem; color: var(--ink-2); line-height: 2; }
+  .art-method a { color: var(--brand-700); font-weight: 700; text-decoration: underline; }
+
+  .art-side { display: grid; gap: 16px; align-content: start; }
+  @media (min-width: 1024px) { .art-side { position: sticky; top: calc(var(--header-h) + 16px); max-height: calc(100vh - var(--header-h) - 32px); overflow: auto; scrollbar-width: thin; } }
+  .side-box { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-sm); }
+  .side-box__title { font-size: .95rem; display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+  .side-box__title :global(svg) { width: 18px; height: 18px; color: var(--brand); }
+  .side-toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; font-size: .84rem; }
+  .side-toc a { display: block; padding: 4px 8px; border-radius: 6px; color: var(--ink-2); line-height: 1.8; }
+  .side-toc a:hover { background: var(--brand-50); color: var(--brand-700); }
+  .side-toc .is-sub a { padding-right: 20px; font-size: .8rem; color: var(--muted); }
+  @media (max-width: 1023px) { .side-toc { display: none; } }
+  .side-pillar { display: grid; gap: 8px; justify-items: start; border-color: var(--brand-100); background: var(--brand-50); transition: transform .15s; }
+  .side-pillar:hover { transform: translateY(-2px); }
+  .side-pillar strong { line-height: 1.8; }
+  .side-pillar__more { display: inline-flex; align-items: center; gap: 4px; color: var(--brand-700); font-weight: 700; font-size: .85rem; }
+  .side-pillar__more :global(svg) { width: 16px; height: 16px; }
+  .side-cta { display: grid; gap: 8px; justify-items: center; text-align: center; background: var(--footer); color: #fff; border: 0; }
+  .side-cta > :global(svg) { width: 28px; height: 28px; color: var(--accent); }
+  .side-cta p { font-size: .85rem; color: #c9cdd1; }
+
+  .art-related__links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 28px; }
+</style>

@@ -1,83 +1,66 @@
 ---
-type JsonLd = Record<string, any> | any;
+import { SITE } from "../data/site";
+import { abs } from "../lib/utils";
 
-type Props = {
+export type SeoProps = {
   title: string;
   description: string;
-  canonical: string;
-  robots?: string;
-
-  og?: {
-    type?: string;
-    title?: string;
-    description?: string;
-    image?: string;
-    imageAlt?: string;
-    locale?: string;
-    siteName?: string;
-    updatedTime?: string;
-    section?: string;
-    url?: string;
-  };
-
-  twitter?: {
-    card?: string;
-    title?: string;
-    description?: string;
-    image?: string;
-  };
-
-  jsonLd?: JsonLd[]; // چندین اسکیما
+  /** مسیر نسبی صفحه؛ canonical از روی آن ساخته می‌شود */
+  path: string;
+  image?: string;
+  imageAlt?: string;
+  type?: "website" | "article";
+  noindex?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  section?: string;
+  jsonLd?: object | object[];
 };
 
 const {
   title,
   description,
-  canonical,
-  robots = "index,follow,max-snippet:-1,max-video-preview:-1,max-image-preview:large",
-  og = {},
-  twitter = {},
-  jsonLd = [],
-} = Astro.props;
+  path,
+  image = SITE.defaultImage,
+  imageAlt = title,
+  type = "website",
+  noindex = false,
+  publishedTime,
+  modifiedTime,
+  section,
+  jsonLd,
+} = Astro.props as SeoProps;
 
-const ogTitle = og.title ?? title;
-const ogDesc = og.description ?? description;
-const ogUrl = og.url ?? canonical;
-
-const twTitle = twitter.title ?? title;
-const twDesc = twitter.description ?? description;
+const canonical = abs(path);
+const ogImage = abs(image);
+const robots = noindex
+  ? "noindex,follow"
+  : "index,follow,max-snippet:-1,max-video-preview:-1,max-image-preview:large";
+const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
 <meta name="robots" content={robots} />
 <link rel="canonical" href={canonical} />
+<link rel="alternate" type="application/rss+xml" title={`${SITE.name} — آخرین راهنماها`} href="/feed.xml" />
 
-{/* OpenGraph */}
-<meta property="og:locale" content={og.locale ?? "fa_IR"} />
-<meta property="og:type" content={og.type ?? "article"} />
-<meta property="og:title" content={ogTitle} />
-<meta property="og:description" content={ogDesc} />
-<meta property="og:url" content={ogUrl} />
-<meta property="og:site_name" content={og.siteName ?? "کجا هست"} />
-{og.section ? <meta property="article:section" content={og.section} /> : null}
-{og.updatedTime ? <meta property="og:updated_time" content={og.updatedTime} /> : null}
+<meta property="og:locale" content={SITE.locale} />
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:alt" content={imageAlt} />
+{type === "article" && publishedTime && <meta property="article:published_time" content={publishedTime} />}
+{type === "article" && modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+{type === "article" && modifiedTime && <meta property="og:updated_time" content={modifiedTime} />}
+{type === "article" && section && <meta property="article:section" content={section} />}
 
-{og.image ? (
-  <>
-    <meta property="og:image" content={og.image} />
-    <meta property="og:image:secure_url" content={og.image} />
-    {og.imageAlt ? <meta property="og:image:alt" content={og.imageAlt} /> : null}
-  </>
-) : null}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
 
-{/* Twitter */}
-<meta name="twitter:card" content={twitter.card ?? "summary_large_image"} />
-<meta name="twitter:title" content={twTitle} />
-<meta name="twitter:description" content={twDesc} />
-{twitter.image ? <meta name="twitter:image" content={twitter.image} /> : null}
-
-{/* JSON-LD */}
-{jsonLd.map((obj) => (
-  <script type="application/ld+json" set:html={JSON.stringify(obj)} />
-))}
+{schemas.map((obj) => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}

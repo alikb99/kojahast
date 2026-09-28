@@ -1,0 +1,12 @@
+# ریدایرکت‌های دائمی (Cloudflare Pages / Netlify)
+# اسلاگ اشتباه قدیمی سرفیس
+/blog/urface-repair-in-tehran/        /blog/surface-repair-in-tehran/   301
+/blog/urface-repair-in-tehran         /blog/surface-repair-in-tehran/   301
+# لینک خراب قدیمی فوتر
+/blog/category/laptop-repairs/        /blog/category/laptop-and-computer-repair/   301
+/blog/category/laptop-repairs         /blog/category/laptop-and-computer-repair/   301
+# فید
+/feed/                                /feed.xml   301
+/feed                                 /feed.xml   301
+# سایت‌مپ قدیمی
+/sitemap.xml                          /sitemap-index.xml   301

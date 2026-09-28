@@ -1,0 +1,119 @@
+---
+import { Icon } from "astro-icon/components";
+type Props = { placeholder?: string; id?: string };
+const { placeholder = "برند یا خدمت؛ مثلاً تعمیر گوشی شیائومی", id = "site-search" } = Astro.props;
+---
+
+<form class="search" action="/blog/" method="get" role="search" data-search>
+  <span class="search__city">
+    <Icon name="lucide:map-pin" />
+    تهران
+  </span>
+  <label for={id} class="visually-hidden">جستجو در راهنماها و مراکز</label>
+  <input
+    id={id}
+    name="q"
+    type="search"
+    autocomplete="off"
+    placeholder={placeholder}
+    aria-autocomplete="list"
+    aria-controls={`${id}-results`}
+    aria-expanded="false"
+    role="combobox"
+  />
+  <button type="submit" aria-label="جستجو"><Icon name="lucide:search" /></button>
+  <ul class="search__results" id={`${id}-results`} role="listbox" hidden></ul>
+</form>
+
+<script>
+  type Item = { t: string; u: string; s: string; k: string };
+  let index: Item[] | null = null;
+  const norm = (s: string) =>
+    s.toLowerCase().replace(/ي/g, "ی").replace(/ك/g, "ک").replace(/[‌‏‌]/g, " ").replace(/\s+/g, " ").trim();
+
+  async function load() {
+    if (index) return index;
+    const res = await fetch("/search-index.json");
+    index = ((await res.json()) as Item[]).map((x) => ({ ...x, k: norm(x.k) }));
+    return index;
+  }
+
+  document.querySelectorAll<HTMLFormElement>("[data-search]").forEach((form) => {
+    const input = form.querySelector("input")!;
+    const list = form.querySelector<HTMLUListElement>(".search__results")!;
+    let active = -1;
+
+    const render = (items: Item[]) => {
+      active = -1;
+      list.innerHTML = items
+        .map(
+          (x, i) =>
+            `<li role="option" id="${input.id}-opt-${i}"><a href="${x.u}"><strong>${x.t}</strong><small>${x.s}</small></a></li>`
+        )
+        .join("");
+      const show = items.length > 0;
+      list.hidden = !show;
+      input.setAttribute("aria-expanded", String(show));
+    };
+
+    input.addEventListener("focus", () => load(), { once: true });
+    input.addEventListener("input", async () => {
+      const q = norm(input.value);
+      if (q.length < 2) return render([]);
+      const words = q.split(" ");
+      const data = await load();
+      render(data.filter((x) => words.every((w) => x.k.includes(w))).slice(0, 8));
+    });
+    input.addEventListener("keydown", (e) => {
+      const opts = list.querySelectorAll("li");
+      if (!opts.length) return;
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        active = (active + (e.key === "ArrowDown" ? 1 : -1) + opts.length) % opts.length;
+        opts.forEach((o, i) => o.classList.toggle("is-active", i === active));
+        input.setAttribute("aria-activedescendant", opts[active].id);
+      } else if (e.key === "Enter" && active >= 0) {
+        e.preventDefault();
+        opts[active].querySelector("a")?.click();
+      } else if (e.key === "Escape") {
+        render([]);
+      }
+    });
+    document.addEventListener("click", (e) => {
+      if (!form.contains(e.target as Node)) render([]);
+    });
+  });
+</script>
+
+<style>
+  .search {
+    position: relative; display: flex; align-items: center; background: #fff; border-radius: 999px;
+    box-shadow: var(--shadow-lg); padding: 5px; width: 100%; max-width: 620px; margin-inline: auto;
+  }
+  .search__city {
+    display: none; align-items: center; gap: 4px; padding: 0 14px 0 12px; font-size: .88rem; font-weight: 700;
+    color: var(--ink-2); border-left: 1px solid var(--line); white-space: nowrap;
+  }
+  .search__city svg { width: 16px; height: 16px; color: var(--brand); }
+  @media (min-width: 560px) { .search__city { display: inline-flex; } }
+  .search input {
+    flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: .95rem;
+    padding: 10px 14px; color: var(--ink);
+  }
+  .search input::placeholder { color: #9aa0a6; }
+  .search input::-webkit-search-cancel-button { display: none; }
+  .search button {
+    width: 46px; height: 46px; border-radius: 50%; border: 0; background: var(--accent); color: #2a2104;
+    display: grid; place-items: center; cursor: pointer; flex: none; transition: background .15s;
+  }
+  .search button:hover { background: var(--accent-600); }
+  .search button svg { width: 20px; height: 20px; }
+  .search__results {
+    position: absolute; top: calc(100% + 8px); right: 0; left: 0; z-index: 20; list-style: none; margin: 0; padding: 6px;
+    background: #fff; border-radius: 16px; box-shadow: var(--shadow-lg); text-align: right; max-height: 360px; overflow: auto;
+  }
+  .search__results :global(a) { display: flex; flex-direction: column; padding: 8px 12px; border-radius: 10px; line-height: 1.7; }
+  .search__results :global(li.is-active a), .search__results :global(a:hover) { background: var(--brand-50); }
+  .search__results :global(strong) { font-size: .9rem; color: var(--ink); }
+  .search__results :global(small) { font-size: .78rem; color: var(--muted); }
+</style>

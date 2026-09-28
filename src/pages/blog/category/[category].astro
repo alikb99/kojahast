@@ -1,121 +1,113 @@
 ---
+import { Icon } from "astro-icon/components";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import PostCard from "../../../components/PostCard.astro";
+import { CATEGORIES, BRAND_ICONS, type CategorySlug } from "../../../data/site";
+import { getPosts } from "../../../lib/posts";
+import { organization, website, webPage, breadcrumb, graph, type Crumb } from "../../../lib/schema";
+import { abs, fa, postUrl, categoryUrl, inlineMd } from "../../../lib/utils";
 
-export async function getStaticPaths() {
-  const posts = await getCollection("posts");
-  const categorySlugs = Array.from(new Set(posts.map((p) => p.data.category.slug)));
-  return categorySlugs.map((category) => ({ params: { category } }));
+export function getStaticPaths() {
+  return Object.keys(CATEGORIES).map((category) => ({ params: { category } }));
 }
 
-const { category } = Astro.params;
+const slug = Astro.params.category as CategorySlug;
+const cat = CATEGORIES[slug];
+const all = await getPosts();
+const posts = all.filter((p) => p.data.category === slug);
+const pillar = posts.find((p) => p.data.pillar);
+const clusters = posts.filter((p) => !p.data.pillar);
+const centers = posts.reduce((n, p) => n + p.data.centers.length, 0);
+const url = categoryUrl(slug);
+const otherCat = Object.values(CATEGORIES).find((c) => c.slug !== slug)!;
 
-const posts = await getCollection("posts", ({ data }) => data.category.slug === category);
-
-// مرتب‌سازی (جدیدترین اول)
-const sorted = posts
-  .slice()
-  .sort((a, b) => (b.data.publishedTime ?? "").localeCompare(a.data.publishedTime ?? ""));
-
-const categoryName = sorted[0]?.data.category.name ?? category;
-
-// canonical دسته
-const canonical = `https://kojahast.com/blog/category/${category}/`;
+const crumbs: Crumb[] = [
+  { name: "خانه", url: "/" },
+  { name: "راهنماها", url: "/blog/" },
+  { name: cat.name, url },
+];
 
 const seo = {
-  title: `${categoryName} | کجا هست`,
-  description: `مقالات دسته‌بندی ${categoryName} در کجا هست.`,
-  canonical,
-  robots: "index,follow,max-snippet:-1,max-video-preview:-1,max-image-preview:large",
-  og: {
-    type: "website",
-    title: `${categoryName} | کجا هست`,
-    description: `مقالات دسته‌بندی ${categoryName} در کجا هست.`,
-    siteName: "کجا هست",
-    locale: "fa_IR",
-    url: canonical,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${categoryName} | کجا هست`,
-    description: `مقالات دسته‌بندی ${categoryName} در کجا هست.`,
-  },
-  jsonLd: [
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, item: { "@id": "https://kojahast.com/", name: "خانه" } },
-        { "@type": "ListItem", position: 2, item: { "@id": "https://kojahast.com/blog/", name: "مقالات" } },
-        { "@type": "ListItem", position: 3, item: { "@id": canonical, name: categoryName } },
-      ],
-    },
-  ],
+  title: cat.title,
+  description: cat.description,
+  path: url,
+  image: pillar?.data.image,
+  jsonLd: graph(
+    organization(),
+    website(),
+    { ...webPage({ url, name: cat.title, description: cat.description, type: "CollectionPage", hasBreadcrumb: true }),
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: posts.length,
+        itemListElement: posts.map((p, i) => ({ "@type": "ListItem", position: i + 1, url: abs(postUrl(p.id)), name: p.data.h1 ?? p.data.title })),
+      } },
+    breadcrumb(url, crumbs)
+  ),
 };
-
-// یک کمک کوچک برای نمایش تاریخ (اگر خواستی)
-function formatPersianDate(isoLike?: string) {
-  if (!isoLike) return "";
-  // اگر تاریخ به شکل ISO باشد، نمایش ساده می‌دهیم (می‌تونی بعداً حرفه‌ای‌ترش کنی)
-  const d = new Date(isoLike);
-  if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" });
-}
 ---
 
 <BaseLayout seo={seo}>
-  <main class="mx-auto max-w-6xl px-4 py-10">
-    <header class="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
-      <h1 class="text-2xl font-black leading-10">{categoryName}</h1>
-      <p class="mt-2 leading-8 text-zinc-700">
-        {`آخرین مقالات و معرفی مراکز مرتبط با «${categoryName}»`}
-      </p>
-    </header>
-
-    <section class="mt-8">
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {sorted.map((p) => {
-          const href = `/blog/${p.slug}/`;
-          const img = p.data.og?.image;
-          const imgAlt = p.data.og?.imageAlt ?? p.data.title;
-          const dateText = formatPersianDate(p.data.publishedTime);
-
-          return (
-            <article class="group relative overflow-hidden rounded-2xl border border-zinc-200 bg-white hover:bg-zinc-50">
-              {/* کل کارت کلیک‌پذیر */}
-              <a href={href} class="absolute inset-0 z-10" aria-label={p.data.title}></a>
-
-              {img ? (
-                <div class="h-44 w-full overflow-hidden bg-zinc-100">
-                  <img
-                    src={img}
-                    alt={imgAlt}
-                    loading="lazy"
-                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                  />
-                </div>
-              ) : null}
-
-              <div class="p-4">
-                <h2 class="font-bold leading-8">{p.data.title}</h2>
-
-                <p class="mt-2 text-sm leading-7 text-zinc-700">
-                  {p.data.description}
-                </p>
-
-                {dateText ? (
-                  <p class="mt-3 text-xs text-zinc-500">{dateText}</p>
-                ) : null}
-
-                {/* لینک نمایشی (در کنار کلیک کل کارت) */}
-                <div class="mt-4 inline-flex items-center gap-2 text-sm text-zinc-800">
-                  <span class="underline">مشاهده مقاله</span>
-                </div>
-              </div>
-            </article>
-          );
-        })}
+  <header class="page-hero">
+    <div class="container">
+      <Breadcrumbs items={crumbs} />
+      <h1>راهنمای {cat.shortName} در تهران</h1>
+      <p class="lead">{cat.intro}</p>
+      <div class="cat-stats">
+        <span class="chip"><Icon name="lucide:book-open" />{fa(posts.length)} راهنما</span>
+        <span class="chip chip--accent"><Icon name="lucide:map-pin" />{fa(centers)} مرکز</span>
       </div>
+    </div>
+  </header>
+
+  {pillar && (
+    <section class="container cat-pillar" aria-labelledby="pillar-title">
+      <a class="pillar-card" href={postUrl(pillar.id)}>
+        <img src={pillar.data.image} alt={pillar.data.imageAlt} width="700" height="400" fetchpriority="high" />
+        <div class="pillar-card__body">
+          <span class="chip chip--accent">شروع از اینجا · راهنمای جامع</span>
+          <h2 id="pillar-title">{pillar.data.h1 ?? pillar.data.title}</h2>
+          <p set:html={inlineMd(pillar.data.description)} />
+          <span class="btn btn--brand btn--sm">مشاهده {fa(pillar.data.centers.length)} مرکز <Icon name="lucide:arrow-left" /></span>
+        </div>
+      </a>
     </section>
-  </main>
+  )}
+
+  <section class="section" aria-labelledby="brands-title">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="brands-title">راهنمای تخصصی هر برند</h2>
+        <p>اگر برند دستگاهتان را می‌دانید، مستقیم سراغ راهنمای همان برند بروید؛ مراکز تخصصی‌تر و دقیق‌تری آنجا معرفی شده‌اند.</p>
+      </div>
+      <div class="grid grid--4 cat-tiles">
+        {clusters.map((p) => (
+          <a class="tile" href={postUrl(p.id)}>
+            <span class="tile__icon" style="background:var(--brand-600)"><Icon name={BRAND_ICONS[p.data.brand ?? ""] ?? cat.icon} /></span>
+            <span class="tile__name">{p.data.keyword}</span>
+            <span class="tile__count">({fa(p.data.centers.length)})</span>
+          </a>
+        ))}
+      </div>
+      <div class="grid grid--3 mt-lg">
+        {clusters.map((p, i) => <PostCard post={p} eager={i < 3} />)}
+      </div>
+      <div class="center mt-lg">
+        <a class="btn btn--ghost" href={categoryUrl(otherCat.slug)}>راهنماهای {otherCat.name}</a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  .cat-stats { display: flex; gap: 8px; margin-top: 16px; }
+  .cat-pillar { margin-top: -20px; position: relative; }
+  .pillar-card { display: grid; background: #fff; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--line); transition: transform .2s; }
+  .pillar-card:hover { transform: translateY(-3px); }
+  .pillar-card img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 16 / 9; }
+  .pillar-card__body { padding: 24px; display: grid; gap: 12px; align-content: center; justify-items: start; }
+  .pillar-card h2 { font-size: 1.35rem; }
+  .pillar-card p { color: var(--ink-2); }
+  @media (min-width: 900px) { .pillar-card { grid-template-columns: 1fr 1.1fr; } .pillar-card img { aspect-ratio: auto; } }
+  .cat-tiles { gap: 12px; }
+</style>

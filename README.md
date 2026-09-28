@@ -81,3 +81,15 @@ For permission requests or inquiries, contact:
 
 📞 +98 9916352600# kojahast
 # kojahast
+
+---
+
+## 📚 Documentation (docs/)
+
+- [docs/CHANGELOG.md](docs/CHANGELOG.md) — تغییرات
+- [docs/seo-audit.md](docs/seo-audit.md) — ممیزی سئو و اصلاحات
+- [docs/architecture.md](docs/architecture.md) — معماری و سیستم طراحی
+- [docs/content-guidelines.md](docs/content-guidelines.md) — راهنمای نگارش مقالات و ساختار پیلار/کلاستر
+- [docs/data-verification.md](docs/data-verification.md) — اطلاعات مراکز نیازمند تأیید
+
+اعتبارسنجی مقالات: `node scripts/check-post.mjs src/content/posts/*.md`

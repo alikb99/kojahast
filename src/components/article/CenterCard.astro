@@ -1,91 +1,145 @@
 ---
-type Props = {
-  id: string;            // anchor id مثل "mobileman"
-  name: string;
-  address: string;
-  phone?: string;
-  hours?: string;
-  website?: string;
-  nofollowwebsite?: string;
-  instagram?: string;
+import { Icon } from "astro-icon/components";
+import type { Post } from "../../lib/posts";
+import {
+  fa, inlineMd, phoneDisplay, telHref, instagramUrl, telegramUrl, whatsappUrl, hostOf,
+} from "../../lib/utils";
 
-  // برای نقشه/مسیریابی بهتره lat/lng داشته باشی
-  lat?: number;
-  lng?: number;
-};
+type Center = Post["data"]["centers"][number];
+type Props = { c: Center; n: number };
+const { c, n } = Astro.props;
 
-const {
-  id, name, address, phone, hours, website, nofollowwebsite, instagram, lat, lng
-} = Astro.props;
-
-// لینک‌های مسیریابی:
-// بلد: /directions/driving?origin=lng,lat&destination=lng,lat  (origin اختیاریه؛ اگر نباشه بلد از موقعیت کاربر استفاده می‌کنه)
-// نمونه URL پارامترها در خود دامنه بلد دیده میشه. :contentReference[oaicite:0]{index=0}
-//
-// نشان: طبق نمونه‌های عمومی، لینک کوتاه nshn.ir/maps با origin/destination کار می‌کنه. :contentReference[oaicite:1]{index=1}
-
-const dest = (lat && lng) ? `${lat},${lng}` : "";
-const googleQuery = encodeURIComponent(lat && lng ? `${lat},${lng}` : address);
-
-const googleMapsOpen = `https://www.google.com/maps/search/?api=1&query=${googleQuery}`;
-const googleMapsEmbed = `https://www.google.com/maps?q=${googleQuery}&z=15&output=embed`;
-
-const baladDirections = (lat && lng)
-  ? `https://balad.ir/directions/driving?destination=${encodeURIComponent(`${lng},${lat}`)}`
-  : `https://balad.ir/`; // اگر مختصات نداری، حداقل صفحه بلد
-
-const neshanDirections = (lat && lng)
-  ? `https://nshn.ir/maps?destination=${encodeURIComponent(`${lat},${lng}`)}&type=drive`
-  : `https://neshan.org/maps`; // fallback
+const hasGeo = typeof c.lat === "number" && typeof c.lng === "number";
+const q = encodeURIComponent(hasGeo ? `${c.lat},${c.lng}` : `${c.name} ${c.address}`);
+const googleMaps = `https://www.google.com/maps/search/?api=1&query=${q}`;
+// مسیریابی داخلی فقط وقتی مختصات داریم (بدون مختصات، لینک بی‌فایده نمی‌سازیم)
+const neshan = hasGeo ? `https://nshn.ir/maps?destination=${c.lat},${c.lng}&type=drive` : null;
+const balad = hasGeo ? `https://balad.ir/directions/driving?destination=${c.lng},${c.lat}` : null;
+const ext = { target: "_blank", rel: "nofollow noopener noreferrer" };
 ---
 
-<section id={id} class="mt-10 scroll-mt-24">
-  <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-    <div class="flex flex-col gap-2">
-      <h2 class="text-lg font-black leading-9">{name}</h2>
-
-      <div class="text-sm leading-7 text-zinc-700">
-        <p><span class="font-bold">آدرس:</span> {address}</p>
-        {phone ? <p class="mt-1"><span class="font-bold">تماس:</span> {phone}</p> : null}
-        {hours ? <p class="mt-1"><span class="font-bold">ساعت کاری:</span> {hours}</p> : null}
-        {website ? <p class="mt-1"><span class="font-bold">وبسایت:</span> <a class="underline" href={website} target="_blank" rel="noopener noreferrer">{website}</a></p> : null}
-        {nofollowwebsite ? <p class="mt-1"><span class="font-bold">وبسایت:</span> <a class="underline" href={nofollowwebsite} target="_blank" rel="noopener nofollow noreferrer">{nofollowwebsite}</a></p> : null}
-        {instagram ? <p class="mt-1"><span class="font-bold">اینستاگرام:</span> <span dir="ltr">{instagram}</span></p> : null}
+<section class="center" id={c.id} aria-labelledby={`${c.id}-title`}>
+  <header class="center__head">
+    <span class="center__n" aria-hidden="true">{fa(n)}</span>
+    <div>
+      <h3 id={`${c.id}-title`}>{c.name}</h3>
+      <div class="center__tags">
+        {c.area && <span class="chip chip--gray"><Icon name="lucide:map-pin" />{c.area}</span>}
+        {c.bestFor && <span class="chip"><Icon name="lucide:sparkles" />{c.bestFor}</span>}
       </div>
+    </div>
+  </header>
 
-      {/* دکمه‌ها */}
-      <div class="mt-4 flex flex-wrap gap-2">
-        <a class="rounded-xl bg-zinc-900 px-4 py-2 text-sm text-white" href={googleMapsOpen} target="_blank" rel="nofollow noopener noreferrer">
-          نمایش در گوگل‌مپ
-        </a>
+  <div class="center__body">
+    <div class="center__text prose">
+      {c.summary.map((p) => <p set:html={inlineMd(p)} />)}
+    </div>
 
-        <a class="rounded-xl border border-zinc-300 px-4 py-2 text-sm" href={neshanDirections} target="_blank" rel="nofollow noopener noreferrer">
-          مسیر‌یابی با نشان
-        </a>
-
-        <a class="rounded-xl border border-zinc-300 px-4 py-2 text-sm" href={baladDirections} target="_blank" rel="nofollow noopener noreferrer ">
-          مسیر‌یابی با بلد
-        </a>
+    {c.services.length > 0 && (
+      <div class="center__services">
+        <h4>خدمات اصلی</h4>
+        <ul>
+          {c.services.map((s) => <li><Icon name="lucide:check" /><span set:html={inlineMd(s)} /></li>)}
+        </ul>
       </div>
+    )}
 
-      {/* نقشه (Lazy) */}
-      <details class="mt-4 rounded-xl border border-zinc-200 p-3">
-        <summary class="cursor-pointer text-sm font-bold">نمایش نقشه</summary>
-        <div class="mt-3 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50">
-          <iframe
-            title={`نقشه ${name}`}
-            src={googleMapsEmbed}
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            class="h-72 w-full"
-          />
+    <div class="center__pc">
+      <div class="center__pros">
+        <h4><Icon name="lucide:thumbs-up" />نقاط قوت</h4>
+        <ul>{c.pros.map((s) => <li set:html={inlineMd(s)} />)}</ul>
+      </div>
+      <div class="center__cons">
+        <h4><Icon name="lucide:thumbs-down" />نقاط ضعف</h4>
+        <ul>{c.cons.map((s) => <li set:html={inlineMd(s)} />)}</ul>
+      </div>
+    </div>
+
+    <dl class="center__info">
+      <div>
+        <dt><Icon name="lucide:map-pin" />آدرس</dt>
+        <dd>{c.address}</dd>
+      </div>
+      {c.phones.length > 0 && (
+        <div>
+          <dt><Icon name="lucide:phone" />تلفن</dt>
+          <dd class="center__phones">
+            {c.phones.map((p) => <a href={telHref(p)} class="ltr">{phoneDisplay(p)}</a>)}
+          </dd>
         </div>
-      </details>
+      )}
+      {c.hours && (
+        <div>
+          <dt><Icon name="lucide:clock" />ساعت کاری</dt>
+          <dd>{c.hours}</dd>
+        </div>
+      )}
+      {(c.instagram || c.telegram || c.whatsapp || c.website) && (
+        <div>
+          <dt><Icon name="lucide:globe" />شبکه‌ها و سایت</dt>
+          <dd class="center__social">
+            {c.instagram && <a href={instagramUrl(c.instagram)} {...ext} class="ltr"><Icon name="simple-icons:instagram" />{c.instagram.replace(/^@/, "")}</a>}
+            {c.telegram && <a href={telegramUrl(c.telegram)} {...ext} class="ltr"><Icon name="simple-icons:telegram" />{c.telegram.replace(/^@/, "")}</a>}
+            {c.whatsapp && <a href={whatsappUrl(c.whatsapp)} {...ext} class="ltr"><Icon name="simple-icons:whatsapp" />واتس‌اپ</a>}
+            {c.website && <a href={c.website} {...ext} class="ltr"><Icon name="lucide:globe" />{hostOf(c.website)}</a>}
+          </dd>
+        </div>
+      )}
+    </dl>
 
-      {/* متن توضیحی مرکز */}
-      <div class="mt-4 leading-8 text-zinc-800">
-        <slot />
-      </div>
+    <div class="center__actions">
+      {c.phones.length > 0 && (
+        <a class="btn btn--brand btn--sm" href={telHref(c.phones[0])}><Icon name="lucide:phone" />تماس</a>
+      )}
+      <a class="btn btn--ghost btn--sm" href={googleMaps} {...ext}><Icon name="lucide:map" />گوگل‌مپ</a>
+      {neshan && <a class="btn btn--ghost btn--sm" href={neshan} {...ext}><Icon name="lucide:navigation" />مسیریابی نشان</a>}
+      {balad && <a class="btn btn--ghost btn--sm" href={balad} {...ext}><Icon name="lucide:navigation" />مسیریابی بلد</a>}
     </div>
   </div>
 </section>
+
+<style>
+  .center {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+    scroll-margin-top: calc(var(--header-h) + 16px); overflow: hidden;
+  }
+  .center:target { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-100); }
+  .center__head { display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-bottom: 1px solid var(--line-2); background: linear-gradient(to left, var(--bg-softer), #fff); }
+  .center__n {
+    flex: none; width: 40px; height: 40px; border-radius: 12px; background: var(--brand-600); color: #fff;
+    display: grid; place-items: center; font-weight: 900; font-size: 1.05rem;
+  }
+  .center__head h3 { font-size: 1.15rem; line-height: 1.7; }
+  .center__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .center__body { padding: 18px 20px 20px; display: grid; gap: 18px; }
+  .center__text { font-size: .98rem; }
+  .center h4 { font-size: .92rem; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .center h4 svg { width: 17px; height: 17px; }
+  .center ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: .9rem; line-height: 1.9; }
+  .center__services ul { grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .center__services ul { grid-template-columns: 1fr 1fr; column-gap: 20px; } }
+  .center__services li { display: flex; gap: 6px; align-items: flex-start; }
+  .center__services li svg { width: 16px; height: 16px; color: var(--brand-600); flex: none; margin-top: 6px; }
+  .center__pc { display: grid; gap: 12px; }
+  @media (min-width: 640px) { .center__pc { grid-template-columns: 1fr 1fr; } }
+  .center__pros, .center__cons { border-radius: var(--radius-sm); padding: 12px 14px; }
+  .center__pros { background: var(--brand-50); border: 1px solid var(--brand-100); }
+  .center__pros h4 { color: var(--brand-700); }
+  .center__cons { background: var(--danger-50); border: 1px solid #f6d3cb; }
+  .center__cons h4 { color: var(--danger); }
+  .center__pros li, .center__cons li { position: relative; padding-right: 16px; }
+  .center__pros li::before, .center__cons li::before { position: absolute; right: 0; font-weight: 900; }
+  .center__pros li::before { content: "+"; color: var(--brand-700); }
+  .center__cons li::before { content: "−"; color: var(--danger); }
+  .center__info { margin: 0; display: grid; gap: 10px; background: var(--bg-softer); border: 1px dashed var(--line); border-radius: var(--radius-sm); padding: 14px; font-size: .9rem; }
+  @media (min-width: 720px) { .center__info { grid-template-columns: 1fr 1fr; } .center__info > div:first-child { grid-column: 1 / -1; } }
+  .center__info dt { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: .78rem; font-weight: 700; }
+  .center__info dt svg { width: 15px; height: 15px; color: var(--brand); }
+  .center__info dd { margin: 2px 0 0; color: var(--ink); line-height: 1.9; }
+  .center__phones, .center__social { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  .center__phones a { font-weight: 800; color: var(--brand-700); }
+  .center__social a { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-2); font-size: .85rem; }
+  .center__social a:hover, .center__phones a:hover { text-decoration: underline; }
+  .center__social svg { width: 14px; height: 14px; }
+  .center__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+</style>

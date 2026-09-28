@@ -1,0 +1,14 @@
+---
+import { inlineMd } from "../lib/utils";
+type Props = { items: { q: string; a: string }[]; openFirst?: boolean };
+const { items, openFirst = true } = Astro.props;
+---
+
+<div class="faq">
+  {items.map((it, i) => (
+    <details open={openFirst && i === 0}>
+      <summary>{it.q}</summary>
+      <p class="faq__a" set:html={inlineMd(it.a)} />
+    </details>
+  ))}
+</div>

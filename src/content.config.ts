@@ -15,7 +15,7 @@ const center = z.object({
   address: z.string(),
   phones: z.array(z.string()).default([]),
   hours: z.string().optional(),
-  instagram: z.string().optional(), // فقط آیدی بدون @
+  instagram: z.string().regex(/^[A-Za-z0-9._]{1,30}$/, "آیدی اینستاگرام فقط حروف انگلیسی، عدد، نقطه و _").optional(), // فقط آیدی بدون @
   telegram: z.string().optional(), // فقط آیدی بدون @
   whatsapp: z.string().optional(), // شماره
   website: z.string().url().optional(),

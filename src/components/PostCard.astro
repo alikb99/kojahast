@@ -1,0 +1,37 @@
+---
+import { Icon } from "astro-icon/components";
+import type { Post } from "../lib/posts";
+import { categoryOf } from "../lib/posts";
+import { fa, jalali, postUrl } from "../lib/utils";
+
+type Props = { post: Post; eager?: boolean; headingLevel?: 2 | 3 };
+const { post, eager = false, headingLevel = 3 } = Astro.props;
+const d = post.data;
+const cat = categoryOf(post);
+const H = headingLevel === 2 ? "h2" : "h3";
+const group = d.category === "mobile-repairs" ? "mobile" : "laptop";
+const isApple = /اپل|آیفون|آیپد|ایرپاد|مک/.test(`${d.brand ?? ""} ${d.keyword}`);
+---
+
+<article class="post-card" data-group={group} data-apple={isApple ? "1" : undefined}>
+  <div class="post-card__media">
+    <img
+      src={d.image}
+      alt={d.imageAlt}
+      width="640"
+      height="400"
+      loading={eager ? "eager" : "lazy"}
+      decoding="async"
+    />
+  </div>
+  <span class="post-card__pin" aria-hidden="true"><Icon name="lucide:wrench" /></span>
+  <div class="post-card__body">
+    <span class="visually-hidden">{cat.name}</span>
+    <H class="post-card__title"><a href={postUrl(post.id)}>{d.h1 ?? d.title}</a></H>
+    <p class="post-card__desc">{d.description}</p>
+    <div class="post-card__meta">
+      <span><Icon name="lucide:map-pin" />{fa(d.centers.length)} مرکز</span>
+      <span><Icon name="lucide:calendar" />{jalali(d.modifiedTime, { year: "numeric", month: "long" })}</span>
+    </div>
+  </div>
+</article>
