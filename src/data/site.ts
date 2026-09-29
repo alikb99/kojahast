@@ -85,6 +85,7 @@ export const BRAND_ICONS: Record<string, string> = {
   "مک‌بوک": "simple-icons:apple",
   "مک بوک": "simple-icons:apple",
   نوکیا: "simple-icons:nokia",
+  "وان پلاس": "simple-icons:oneplus",
   ایسوس: "simple-icons:asus",
   ایسر: "simple-icons:acer",
   دل: "simple-icons:dell",
