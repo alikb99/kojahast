@@ -12,7 +12,7 @@ import {
   getPosts, categoryOf, clustersOf, pillarOf, relatedOf, postWordCount, shortLabel, type Post,
 } from "../../lib/posts";
 import { articleGraph, type Crumb } from "../../lib/schema";
-import { fa, jalali, inlineMd, readingMinutes, postUrl, categoryUrl, telHref } from "../../lib/utils";
+import { fa, jalali, inlineMd, readingMinutes, postUrl, categoryUrl } from "../../lib/utils";
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -158,12 +158,6 @@ const seo = {
         </a>
       )}
 
-      <div class="side-box side-cta">
-        <Icon name="lucide:phone" />
-        <strong>نمی دانید کدام مرکز مناسب شماست؟</strong>
-        <p>مشکل دستگاه را بگویید، مرکز مناسب را معرفی می کنیم.</p>
-        <a class="btn btn--brand btn--sm" href={telHref(SITE.phone)}><span class="ltr">{SITE.phoneDisplay}</span></a>
-      </div>
     </aside>
   </div>
 
@@ -231,9 +225,6 @@ const seo = {
   .side-pillar strong { line-height: 1.8; }
   .side-pillar__more { display: inline-flex; align-items: center; gap: 4px; color: var(--brand-700); font-weight: 700; font-size: .85rem; }
   .side-pillar__more :global(svg) { width: 16px; height: 16px; }
-  .side-cta { display: grid; gap: 8px; justify-items: center; text-align: center; background: var(--footer); color: #fff; border: 0; }
-  .side-cta > :global(svg) { width: 28px; height: 28px; color: var(--accent); }
-  .side-cta p { font-size: .85rem; color: #c9cdd1; }
 
   .art-related__links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 28px; }
 </style>

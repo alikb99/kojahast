@@ -5,7 +5,6 @@ import Breadcrumbs from "../components/Breadcrumbs.astro";
 import FaqList from "../components/FaqList.astro";
 import { SITE } from "../data/site";
 import { organization, website, webPage, breadcrumb, faqPage, graph, type Crumb } from "../lib/schema";
-import { telHref } from "../lib/utils";
 
 const url = "/contact/";
 const crumbs: Crumb[] = [
@@ -53,26 +52,11 @@ const seo = {
   <section class="section">
     <div class="container contact">
       <div class="contact__cards">
-        <a class="c-card" href={telHref(SITE.phone)}>
-          <Icon name="lucide:phone" />
-          <span>تلفن پشتیبانی</span>
-          <strong class="ltr">{SITE.phoneDisplay}</strong>
-        </a>
         <a class="c-card" href={`mailto:${SITE.email}`}>
           <Icon name="lucide:mail" />
           <span>ایمیل</span>
           <strong class="ltr">{SITE.email}</strong>
         </a>
-        <div class="c-card">
-          <Icon name="lucide:clock" />
-          <span>ساعت پاسخگویی</span>
-          <strong>{SITE.hours}</strong>
-        </div>
-        <div class="c-card">
-          <Icon name="lucide:map-pin" />
-          <span>آدرس</span>
-          <strong>{SITE.address}</strong>
-        </div>
       </div>
 
       <div class="card contact__form" id="add-business">

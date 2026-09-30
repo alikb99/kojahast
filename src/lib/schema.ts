@@ -18,8 +18,6 @@ export function organization() {
     url: `${SITE.url}/`,
     logo: { "@type": "ImageObject", url: abs(SITE.logo), width: 512, height: 512 },
     email: SITE.email,
-    telephone: phoneIntl(SITE.phone),
-    address: { "@type": "PostalAddress", streetAddress: SITE.address, addressLocality: "تهران", addressCountry: "IR" },
     ...(() => {
       const same = Object.values(SITE.socials).filter(Boolean);
       return same.length ? { sameAs: same } : {};

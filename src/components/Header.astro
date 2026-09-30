@@ -2,7 +2,6 @@
 import { Icon } from "astro-icon/components";
 import Logo from "./Logo.astro";
 import { NAV, SITE } from "../data/site";
-import { telHref } from "../lib/utils";
 
 const current = Astro.url.pathname;
 const isActive = (href: string) => (href === "/" ? current === "/" : current.startsWith(href));
@@ -56,11 +55,6 @@ const isActive = (href: string) => (href === "/" ? current === "/" : current.sta
   </div>
 </header>
 
-<a class="callbar" href={telHref(SITE.phone)}>
-  <Icon name="lucide:phone" />
-  مشاوره رایگان انتخاب تعمیرگاه
-  <span class="ltr">{SITE.phoneDisplay}</span>
-</a>
 
 <script>
   const burger = document.querySelector<HTMLButtonElement>("[data-burger]");
@@ -141,17 +135,11 @@ const isActive = (href: string) => (href === "/" ? current === "/" : current.sta
   .drawer__nav a[aria-current="page"] { background: var(--brand-50); color: var(--brand-700); border-color: var(--brand-100); }
   .drawer__nav svg { width: 18px; height: 18px; color: var(--muted); }
 
-  .callbar {
-    position: fixed; right: 12px; left: 12px; bottom: 12px; z-index: 40; display: flex; align-items: center;
-    justify-content: center; gap: 8px; min-height: 52px; padding: 8px 16px; border-radius: 14px;
-    background: var(--brand-600); color: #fff; font-weight: 700; font-size: .9rem; box-shadow: var(--shadow-lg);
-  }
-  .callbar svg { width: 18px; height: 18px; }
 
   @media (min-width: 1024px) {
     .site-nav { display: block; }
     .site-header__actions { margin-inline-start: 0; }
     .site-header__cta { display: inline-flex; }
-    .burger, .drawer, .callbar { display: none !important; }
+    .burger, .drawer { display: none !important; }
   }
 </style>
