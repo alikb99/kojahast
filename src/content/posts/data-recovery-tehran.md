@@ -263,7 +263,7 @@ faq:
     a: "نه. صدای تق تق معمولاً یعنی هد آسیب دیده و هر بار روشن کردن، سطح پلاتر را بیشتر خط می اندازد. هارد را خاموش کنید و مستقیم به مرکزی ببرید که جراحی را در کلین روم انجام می دهد."
   - q: "از کجا بفهمم اطلاعاتم پیش مرکز بازیابی محرمانه می ماند؟"
     a: "رسید کتبی با شماره سریال هارد و در صورت نیاز تعهد عدم افشا بگیرید. اطلاعات را روی هارد نوی خودتان تحویل بگیرید و بخواهید نسخه موقت پاک شود."
-related: ["macbook-repair-in-tehran", "dell-laptop-repair-centers-in-tehran", "lenovo-laptop-repair-centers-in-tehran"]
+related: ["laptop-repair-west-tehran", "macbook-repair-in-tehran", "dell-laptop-repair-centers-in-tehran", "lenovo-laptop-repair-centers-in-tehran"]
 ---
 
 ## اولین کار بعد از پریدن اطلاعات: دست نگه دارید

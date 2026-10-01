@@ -344,7 +344,7 @@ faq:
     a: "بهتر است نه. باز شدن دستگاه یا دستکاری برچسب ها در تعمیرگاه آزاد معمولاً گارانتی را باطل می کند. اول با شرکت گارانتی (مثلاً آواژنگ، سازگار ارقام یا حامی) تماس بگیرید و اگر دیدید ایراد شامل گارانتی نمی شود، سراغ تعمیرگاه آزاد بروید."
   - q: "آیا تعمیر لپ تاپ ایسوس در محل امکان دارد؟"
     a: "برای کارهای نرم افزاری، ارتقای رم و SSD و بعضی تعویض های ساده بله. اما تعمیر برد، ریبال چیپ و تعویض پنل به ابزار کارگاهی نیاز دارد و دستگاه باید به تعمیرگاه برود."
-related: ["acer-laptop-repair-center", "lenovo-laptop-repair-centers-in-tehran", "dell-laptop-repair-centers-in-tehran", "hp-laptop-repair-in-tehran"]
+related: ["laptop-repair-west-tehran", "acer-laptop-repair-center", "lenovo-laptop-repair-centers-in-tehran", "dell-laptop-repair-centers-in-tehran", "hp-laptop-repair-in-tehran"]
 ---
 
 ## چطور مرکز مناسب برای تعمیر لپ تاپ ایسوس در تهران را انتخاب کنیم؟

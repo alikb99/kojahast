@@ -304,7 +304,7 @@ faq:
     a: "از عکس ها و پیام ها بکاپ بگیرید، سیم کارت و کارت حافظه را دربیاورید و حساب Mi را بشناسید؛ چون بعد از بعضی تعمیرها گوشی رمز حساب Mi را می خواهد. رمز صفحه را هم فقط در صورت نیاز و به تکنسین بدهید."
   - q: "گوشی شیائومی گارانتی دارم؛ اگر در تعمیرگاه آزاد باز شود چه می شود؟"
     a: "باز شدن گوشی در جای دیگر معمولاً گارانتی را باطل می کند. تا وقتی گارانتی معتبر است، تعمیر را به شرکت گارانتی دهنده بسپارید و فقط بعد از پایان آن سراغ تعمیرگاه آزاد بروید."
-related: ["samsung-mobile-repair-tehran", "huawei-mobile-repair-centers-in-tehran", "iphone-repairs-tehran"]
+related: ["nokia-mobile-repair-tehran", "samsung-mobile-repair-tehran", "huawei-mobile-repair-centers-in-tehran", "iphone-repairs-tehran"]
 ---
 
 ## چطور مرکز تعمیر شیائومی مناسب را انتخاب کنیم

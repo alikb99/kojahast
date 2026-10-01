@@ -279,7 +279,7 @@ faq:
     a: "کارهای ساده مثل تعویض باتری یا سرویس فن معمولاً همان روز یا فردا تمام می شود. تعمیر برد بین سه تا هفت روز کاری زمان می برد و اگر قطعه ای مثل ال سی دی باید سفارش داده شود، ممکن است بیشتر طول بکشد."
   - q: "قبل از تحویل لپ تاپ به تعمیرگاه با اطلاعاتم چه کنم؟"
     a: "اگر دستگاه روشن می شود، از فایل های مهم روی هارد اکسترنال یا فضای ابری نسخه پشتیبان بگیرید، رمزهای ذخیره شده مرورگر را خارج کنید و در برگه پذیرش بنویسید که اطلاعات باید حفظ شود."
-related: ["lenovo-laptop-repair-centers-in-tehran", "dell-laptop-repair-centers-in-tehran", "asus-laptop-repair-center-in-tehran"]
+related: ["sony-laptop-repair-centers", "lenovo-laptop-repair-centers-in-tehran", "dell-laptop-repair-centers-in-tehran", "asus-laptop-repair-center-in-tehran"]
 ---
 
 ## چطور بین مراکز تعمیر لپ تاپ HP در تهران انتخاب کنیم؟

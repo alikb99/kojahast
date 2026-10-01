@@ -256,7 +256,7 @@ faq:
     a: "تعویض باتری یا سوکت شارژ معمولاً همان روز انجام می شود. اگر قطعه باید سفارش داده شود یا گوشی تحت گارانتی به دفتر مرکزی شرکت ارسال شود، زمان تحویل ممکن است به یک تا دو هفته برسد."
   - q: "چطور گوشی هوآوی را ریست فکتوری کنیم؟"
     a: "از تنظیمات وارد بخش System & updates و سپس Reset شوید و گزینه Factory data reset را بزنید. قبلش حتماً بکاپ بگیرید و رمز حساب Huawei ID را داشته باشید، چون بعد از ریست ممکن است برای فعال سازی دوباره خواسته شود."
-related: ["xiaomi-mobile-repair-in-tehran", "samsung-mobile-repair-tehran", "iphone-repairs-tehran"]
+related: ["nokia-mobile-repair-tehran", "xiaomi-mobile-repair-in-tehran", "samsung-mobile-repair-tehran", "iphone-repairs-tehran"]
 ---
 
 ## راهنمای انتخاب مرکز تعمیر گوشی هوآوی در تهران

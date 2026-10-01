@@ -283,7 +283,7 @@ faq:
     a: "بله، در بیشتر مدل ها تعمیرگاه های تخصصی دل رمز بایوس را برمی دارند. اما این کار گاهی به باز کردن دستگاه و دسترسی به برد نیاز دارد، پس آن را به مرکز معتبر بسپارید و فاکتور خرید دستگاه را همراه داشته باشید."
   - q: "تعمیر لپ تاپ دل چقدر طول می کشد؟"
     a: "تعویض باتری، کیبورد یا سرویس فن اگر قطعه موجود باشد در یکی دو روز انجام می شود. تعمیر برد معمولاً سه تا هفت روز کاری زمان می برد و برای ایکس پی اس یا مدل های کم فروش که قطعه وارداتی می خواهند ممکن است بیشتر طول بکشد."
-related: ["hp-laptop-repair-in-tehran", "lenovo-laptop-repair-centers-in-tehran", "asus-laptop-repair-center-in-tehran"]
+related: ["sony-laptop-repair-centers", "hp-laptop-repair-in-tehran", "lenovo-laptop-repair-centers-in-tehran", "asus-laptop-repair-center-in-tehran"]
 ---
 
 ## راهنمای انتخاب مرکز تعمیر لپ تاپ دل در تهران

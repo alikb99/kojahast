@@ -257,7 +257,7 @@ faq:
     a: "اول شارژر را با یک شارژر سالم دیگر امتحان کنید. اگر مشکل ماند، ممکن است سوکت شارژ، باتری یا مدار شارژ روی برد خراب باشد. در برخی مدل ها هم حالت Conservation Mode در نرم افزار Lenovo Vantage شارژ را روی ۶۰ یا ۸۰ درصد نگه می دارد."
   - q: "تعمیر لپ تاپ لنوو چقدر طول می کشد؟"
     a: "تعویض باتری، کیبورد یا سرویس فن معمولاً یک تا دو روز کاری طول می کشد. تعمیر برد بین سه تا هفت روز زمان می برد و اگر قطعه باید سفارش داده شود، ممکن است بیشتر شود."
-related: ["hp-laptop-repair-in-tehran", "asus-laptop-repair-center-in-tehran", "acer-laptop-repair-center"]
+related: ["laptop-repair-west-tehran", "sony-laptop-repair-centers", "hp-laptop-repair-in-tehran", "asus-laptop-repair-center-in-tehran", "acer-laptop-repair-center"]
 ---
 
 ## برای تعمیر لپ تاپ لنوو در تهران کدام مرکز مناسب تر است؟
