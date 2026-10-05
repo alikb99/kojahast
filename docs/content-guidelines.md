@@ -131,7 +131,11 @@ related: ["samsung-mobile-repair-tehran", "huawei-mobile-repair-centers-in-tehra
         ├── sony-laptop-repair-centers
         ├── surface-repair-in-tehran
         ├── macbook-repair-in-tehran
-        └── data-recovery-tehran
+        ├── data-recovery-tehran
+        ├── laptop-repair-west-tehran
+        ├── game-console-repair-tehran
+        ├── computer-repair-tehran
+        └── printer-repair-tehran
 ```
 
 ### قواعد لینک
