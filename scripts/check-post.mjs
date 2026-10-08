@@ -19,7 +19,7 @@ const planned = [
   "laptop-repair-in-tehran", "asus-laptop-repair-center-in-tehran", "acer-laptop-repair-center",
   "dell-laptop-repair-centers-in-tehran", "hp-laptop-repair-in-tehran", "lenovo-laptop-repair-centers-in-tehran",
   "sony-laptop-repair-centers", "surface-repair-in-tehran", "macbook-repair-in-tehran",
-  "realme-mobile-repair-tehran", "oneplus-mobile-repair-tehran", "data-recovery-tehran", "laptop-repair-west-tehran", "game-console-repair-tehran", "computer-repair-tehran", "printer-repair-tehran",
+  "realme-mobile-repair-tehran", "oneplus-mobile-repair-tehran", "data-recovery-tehran", "laptop-repair-west-tehran", "game-console-repair-tehran", "computer-repair-tehran", "printer-repair-tehran", "smartwatch-repair-tehran",
 ];
 planned.forEach((s) => slugs.add(s));
 const staticPages = ["/", "/blog/", "/about/", "/contact/", "/blog/category/mobile-repairs/", "/blog/category/laptop-and-computer-repair/"];
