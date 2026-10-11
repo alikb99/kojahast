@@ -121,7 +121,8 @@ related: ["samsung-mobile-repair-tehran", "huawei-mobile-repair-centers-in-tehra
 │       ├── airpods-repair-tehran
 │       ├── realme-mobile-repair-tehran
 │       ├── oneplus-mobile-repair-tehran
-│       └── smartwatch-repair-tehran
+│       ├── smartwatch-repair-tehran
+│       └── bluetooth-handsfree-repair-tehran
 └── دسته: لپ تاپ و کامپیوتر  (/blog/category/laptop-and-computer-repair/)
     └── پیلار: تعمیر لپ تاپ در تهران  (/blog/laptop-repair-in-tehran/)
         ├── asus-laptop-repair-center-in-tehran
@@ -136,7 +137,8 @@ related: ["samsung-mobile-repair-tehran", "huawei-mobile-repair-centers-in-tehra
         ├── laptop-repair-west-tehran
         ├── game-console-repair-tehran
         ├── computer-repair-tehran
-        └── printer-repair-tehran
+        ├── printer-repair-tehran
+        └── photocopier-repair-tehran
 ```
 
 ### قواعد لینک

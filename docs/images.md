@@ -26,6 +26,7 @@
 | `airpods-repair-tehran` | `posts/airpods-repair-tehran.webp` | [AgLMrojqjAM](https://unsplash.com/photos/AgLMrojqjAM) | Daniel Romero |
 | `apple-watch-repair-tehran` | `posts/apple-watch-repair-tehran.webp` | [2wFoa040m8g](https://unsplash.com/photos/2wFoa040m8g) | Simon Daoudi |
 | `asus-laptop-repair-center-in-tehran` | `posts/asus-laptop-repair-center-in-tehran.webp` | [Saj5h85DbOs](https://unsplash.com/photos/Saj5h85DbOs) | Kompjuteri Com |
+| `bluetooth-handsfree-repair-tehran` | `posts/bluetooth-handsfree-repair-tehran.webp` | [HuTUDQqr88c](https://unsplash.com/photos/HuTUDQqr88c) | Roger Cai |
 | `computer-repair-tehran` | `posts/computer-repair-tehran.webp` | [sMKUYIasyDM](https://unsplash.com/photos/sMKUYIasyDM) | JESHOOTS.COM |
 | `data-recovery-tehran` | `posts/data-recovery-tehran.webp` | [_zIq5WCzfHE](https://unsplash.com/photos/_zIq5WCzfHE) | William Warby |
 | `dell-laptop-repair-centers-in-tehran` | `posts/dell-laptop-repair-centers-in-tehran.webp` | [0uVSMGdeUKM](https://unsplash.com/photos/0uVSMGdeUKM) | Its me Pravin |
@@ -41,6 +42,7 @@
 | `mobile-repair-tehran` | `posts/mobile-repair-tehran.webp` | [IpTPp_aPbYE](https://unsplash.com/photos/IpTPp_aPbYE) | ThisisEngineering |
 | `nokia-mobile-repair-tehran` | `posts/nokia-mobile-repair-tehran.webp` | [F5V6d7nPsLQ](https://unsplash.com/photos/F5V6d7nPsLQ) | Isaac Smith |
 | `oneplus-mobile-repair-tehran` | `posts/oneplus-mobile-repair-tehran.webp` | [j44CS0Rwx6g](https://unsplash.com/photos/j44CS0Rwx6g) | Boran Kleinlugtenbeld |
+| `photocopier-repair-tehran` | `posts/photocopier-repair-tehran.webp` | [CGnoRQZGWmw](https://unsplash.com/photos/CGnoRQZGWmw) | engin akyurt |
 | `printer-repair-tehran` | `posts/printer-repair-tehran.webp` | [5AoOejjRUrA](https://unsplash.com/photos/5AoOejjRUrA) | Mahrous Houses |
 | `realme-mobile-repair-tehran` | `posts/realme-mobile-repair-tehran.webp` | [cS8zw28b2s4](https://unsplash.com/photos/cS8zw28b2s4) | Andrey Matveev |
 | `samsung-mobile-repair-tehran` | `posts/samsung-mobile-repair-tehran.webp` | [H8-mb0OBx6s](https://unsplash.com/photos/H8-mb0OBx6s) | Evgeny Opanasenko |
