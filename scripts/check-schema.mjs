@@ -8,7 +8,8 @@ const files = [];
   for (const f of fs.readdirSync(d)) {
     const p = path.join(d, f);
     if (fs.statSync(p).isDirectory()) walk(p);
-    else if (p.endsWith(".html")) files.push(p);
+    // فایل تأیید مالکیت سرچ کنسول (google*.html) صفحه سایت نیست
+    else if (p.endsWith(".html") && !/^google[0-9a-f]+\.html$/.test(f)) files.push(p);
   }
 })("dist");
 
