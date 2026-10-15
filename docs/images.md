@@ -18,6 +18,8 @@
 3. دانلود از `images.unsplash.com` با `w=1200&h=690&fit=crop` و تبدیل به webp با Pillow
 4. چک تکراری نبودن شناسه عکس در کل سایت
 
+> از ۲۳ مهر ۱۴۰۵ جستجوی Unsplash (حتی با مرورگر) پشت چالش ضدربات «BotStopper» است و رد می شود. روش جایگزین: پیدا کردن شناسه عکس با جستجوی وب محدود به unsplash.com، بعد درخواست `https://unsplash.com/photos/<id>/download?force=true` از طریق پراکسی که به `images.unsplash.com` ریدایرکت می کند، و دانلود از همان آدرس با `w=1200&h=690&fit=crop`.
+
 ## فهرست تصاویر
 
 | مقاله | فایل | عکس Unsplash | عکاس |
@@ -30,6 +32,7 @@
 | `computer-repair-tehran` | `posts/computer-repair-tehran.webp` | [sMKUYIasyDM](https://unsplash.com/photos/sMKUYIasyDM) | JESHOOTS.COM |
 | `data-recovery-tehran` | `posts/data-recovery-tehran.webp` | [_zIq5WCzfHE](https://unsplash.com/photos/_zIq5WCzfHE) | William Warby |
 | `dell-laptop-repair-centers-in-tehran` | `posts/dell-laptop-repair-centers-in-tehran.webp` | [0uVSMGdeUKM](https://unsplash.com/photos/0uVSMGdeUKM) | Its me Pravin |
+| `face-id-repair-tehran` | `posts/face-id-repair-tehran.webp` | [yqk77EdSrwI](https://unsplash.com/photos/yqk77EdSrwI) | Egor Litvinov |
 | `game-console-repair-tehran` | `posts/game-console-repair-tehran.webp` | [NVD_32BBZFE](https://unsplash.com/photos/NVD_32BBZFE) | Kerde Severin |
 | `hp-laptop-repair-in-tehran` | `posts/hp-laptop-repair-in-tehran.webp` | [qmcTZZ7XhqY](https://unsplash.com/photos/qmcTZZ7XhqY) | Andrey Matveev |
 | `huawei-mobile-repair-centers-in-tehran` | `posts/huawei-mobile-repair-centers-in-tehran.webp` | [-JUfltUcMG8](https://unsplash.com/photos/-JUfltUcMG8) | Kamil Kot |
@@ -49,6 +52,7 @@
 | `smartwatch-repair-tehran` | `posts/smartwatch-repair-tehran.webp` | [COvwQWG2XMc](https://unsplash.com/photos/COvwQWG2XMc) | Daniel Romero |
 | `sony-laptop-repair-centers` | `posts/sony-laptop-repair-centers.webp` | [5NE6xo4g2y8](https://unsplash.com/photos/5NE6xo4g2y8) | 85mm.ca |
 | `surface-repair-in-tehran` | `posts/surface-repair-in-tehran.webp` | [6U9oaiiwOXQ](https://unsplash.com/photos/6U9oaiiwOXQ) | Przemyslaw Marczynski |
+| `tablet-repair-tehran` | `posts/tablet-repair-tehran.webp` | [Pn9t7RNZYVw](https://unsplash.com/photos/Pn9t7RNZYVw) | Yahdi Romelo |
 | `xiaomi-mobile-repair-in-tehran` | `posts/xiaomi-mobile-repair-in-tehran.webp` | [LeFwBk1VNAM](https://unsplash.com/photos/LeFwBk1VNAM) | Li Yan |
 
 ## تصاویر قدیمی
